@@ -43,6 +43,8 @@ const NavDrawer = () => {
     };
   }, [isShowMenuDrawer]);
 
+  
+
   return (
     <div
       className={`fixed left-0 top-0 z-50 flex h-screen w-full flex-col overflow-y-auto transition-transform lg:hidden ${isShowMenuDrawer ? 'translate-x-0' : 'translate-x-full'} `}>
@@ -111,5 +113,6 @@ const NavDrawer = () => {
     </div>
   );
 };
+
 
 export default NavDrawer;
