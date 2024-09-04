@@ -1,0 +1,239 @@
+@import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'NanumSquare Neo';
+  src: url('/fonts/NanumSquareNeoOTF-Lt.otf') format('opentype');
+  font-weight: 350;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter-Regular.ttf');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter-Medium.ttf');
+  font-weight: 500;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter-SemiBold.ttf');
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 500;
+  font-style: normal;
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Medium.eot');
+  src:
+    url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Medium.eot?#iefix')
+      format('embedded-opentype'),
+    url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Medium.woff2')
+      format('woff2'),
+    url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Medium.woff')
+      format('woff'),
+    url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Medium.ttf')
+      format('truetype');
+  font-display: swap;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #010101;
+
+  color: #ffffff;
+  font-family: Inter;
+}
+
+*,
+::before,
+::after {
+  border-width: 0;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+img {
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+}
+
+/* Firefox  */
+input[type='number'] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+::-webkit-scrollbar {
+  width: 4px; /* 스크롤바의 너비 */
+}
+::-webkit-scrollbar-thumb {
+  height: 57.29px; /* 스크롤바의 길이 */
+  background: #5e6166; /* 스크롤바의 색상 */
+  border-radius: 100px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1f1f1f; /*스크롤바 뒷 배경 색상*/
+}
+
+.text-linear {
+  background: linear-gradient(180deg, #e6e8ec 23.4%, #c1c5ce 77.66%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-linear-gradient {
+  background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0) 100%),
+    linear-gradient(90deg, #ffffff 0%, rgba(255, 255, 255, 0.4) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* flex */
+.flex-2 {
+  flex-grow: 2;
+}
+.flex-3 {
+  flex-grow: 3;
+}
+
+@layer utilities {
+  /* Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
+::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+/*  모달 애니메이션 */
+@keyframes overlayShow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.dialogOverlayAnimation {
+  animation: overlayShow 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.dialogContentAnimation {
+  animation: contentShow 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.squad-linear-gradient {
+  background-clip: text ip !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-background-clip: text !important;
+  background: linear-gradient(
+    90deg,
+    #c598ff -6.98%,
+    #6db0ff 48.28%,
+    #7b80ff 108.14%
+  );
+}
+
+.squad_bg {
+  background-position-x: center !important;
+  background-position-y: top !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-blend-mode: lighten !important;
+  background-color: #0d0d0d !important;
+  background: url('/squad_bg.png');
+}
+
+@media screen and (max-width: 1024px) {
+  .squad_bg {
+    background-position-x: center !important;
+    background-position-y: top !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-blend-mode: lighten !important;
+    background-color: #0d0d0d !important;
+    background: url('/squad_bg_m.png');
+  }
+  .squad_bg_none {
+    background-size: contain !important;
+    background: none !important;
+  }
+}
+
+.hover_button {
+  display: inline-flex;
+  font-size: 14px;
+  font-weight: 400;
+  color: #e5e5e5;
+  line-height: 22.4px;
+
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 12px 0 rgba(255, 255, 255, 0.2) inset;
+  border-radius: 38px;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-sizing: border-box;
+  padding: 7px 20px;
+}
+.hover_button:hover:after {
+  opacity: 1;
+}
+.hover_button:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url('/stroke.png');
+  background-repeat: no-repeat;
+  background-size: 160px 100%;
+  background-position: right;
+  transition-duration: 0.3s;
+  opacity: 0;
+  left: 0;
+  top: 0;
+}
