@@ -23,13 +23,16 @@ const FirstStep = ({setStep}: FirstStepPropsType) => {
 
   const {refetch: getGpuId, isLoading} = useGetUserGpuId({address: address || ''});
   
+  console.log('isLoading===', isLoading);
+
+
 
   useEffect(() => {
     
     const fetch = async () => {
       const result = await getGpuId();
 
-      console.log('result===', result);
+      ////console.log('result===', result);
 
       if (result?.data?.gpuId) {
         
@@ -66,7 +69,7 @@ const FirstStep = ({setStep}: FirstStepPropsType) => {
       gpuId,
     });
 
-    console.log('setUserGpuIdAsync result', result);
+    ///console.log('setUserGpuIdAsync result', result);
 
     return result ? true : false;
   };
@@ -83,7 +86,7 @@ const FirstStep = ({setStep}: FirstStepPropsType) => {
       const fetch = async () => {
         const result = await getGpuId();
   
-        console.log('result===', result);
+        ////console.log('result===', result);
   
         if (result?.data?.gpuId) {
           

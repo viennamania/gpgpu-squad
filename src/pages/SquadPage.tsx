@@ -37,6 +37,9 @@ const SquadPage = () => {
 
   const {refetch: getGpuId, isLoading} = useGetUserGpuId({address: address || ''});
   
+  console.log('isLoading===', isLoading);
+
+  
 
   useEffect(() => {
     
@@ -69,6 +72,9 @@ const SquadPage = () => {
 
 
   const [squadName, setSquadName] = useState('');
+
+  console.log('squdName======', squadName);
+
 
   const {refetch: getUserSquad, } = useGetUserSquad({address: address || ''});
   

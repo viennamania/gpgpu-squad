@@ -24,7 +24,7 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
   const [squadName, setSquadName] = useState('');
 
 
-  console.log('squdName======', squadName);
+  ///console.log('squdName======', squadName);
 
 
 
@@ -45,6 +45,9 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
 
   const {refetch: getGpuId, isLoading} = useGetUserGpuId({address: address || ''});
   
+  console.log('isLoading===', isLoading);
+
+
 
   useEffect(() => {
     
@@ -74,7 +77,7 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
 
 
 
-  const {mutateAsync: makeSquadAsync, isPending} = useMakeSquad();
+  const {mutateAsync: makeSquadAsync} = useMakeSquad();
 
   const makeSquad = async ()  => {
 

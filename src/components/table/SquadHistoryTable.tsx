@@ -42,7 +42,7 @@ const SquadHistoryTable = () => {
 
   const address = useActiveAccount()?.address;
 
-  const {data: userCode} = useAddUser({address});
+  ///const {data: userCode} = useAddUser({address});
 
 
 
@@ -50,7 +50,7 @@ const SquadHistoryTable = () => {
 
   const [gpuId, setGpuId] = useState('');
 
-  const {refetch: getGpuId, isLoading} = useGetUserGpuId({address: address || ''});
+  const {refetch: getGpuId} = useGetUserGpuId({address: address || ''});
   
 
   useEffect(() => {
@@ -79,6 +79,10 @@ const SquadHistoryTable = () => {
 
 
   const [squadName, setSquadName] = useState('');
+  
+  console.log('squdName======', squadName);
+
+  
 
   const {refetch: getUserSquad, } = useGetUserSquad({address: address || ''});
   

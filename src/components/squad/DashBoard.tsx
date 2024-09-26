@@ -64,7 +64,7 @@ const DashBoard = () => {
 
   const address = useActiveAccount()?.address;
 
-  const {data: userCode} = useAddUser({address});
+  ///const {data: userCode} = useAddUser({address});
 
 
 
@@ -72,7 +72,11 @@ const DashBoard = () => {
 
   const [gpuId, setGpuId] = useState('');
 
-  const {refetch: getGpuId, isLoading} = useGetUserGpuId({address: address || ''});
+  console.log('gpuId===', gpuId);
+
+
+
+  const {refetch: getGpuId} = useGetUserGpuId({address: address || ''});
   
 
   useEffect(() => {
