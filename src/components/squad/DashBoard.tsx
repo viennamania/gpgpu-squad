@@ -11,7 +11,7 @@ import {squadState} from '../../atoms/squad';
 import {useRecoilValue} from 'recoil';
 
 import {useActiveAccount} from 'thirdweb/react';
-import {useAddUser} from '../../apis';
+
 
 import {
   useGetUserGpuId,

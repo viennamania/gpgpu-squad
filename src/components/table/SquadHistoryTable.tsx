@@ -13,7 +13,8 @@ import {useRecoilValue} from 'recoil';
 import {squadState} from '../../atoms/squad';
 
 import {useActiveAccount} from 'thirdweb/react';
-import {useAddUser} from '../../apis';
+
+
 
 import {
   useGetUserGpuId,
@@ -82,7 +83,7 @@ const SquadHistoryTable = () => {
   
   console.log('squdName======', squadName);
 
-  
+
 
   const {refetch: getUserSquad, } = useGetUserSquad({address: address || ''});
   

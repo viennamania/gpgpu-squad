@@ -169,7 +169,7 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
 
 
 
-
+  /*
   const [tableData, setTableData] = useState([
     {
       rank: 1,
@@ -200,6 +200,39 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
       radio: false,
     },
   ]);
+  */
+  const tableData = [
+    {
+      rank: 1,
+      name: 'coinboys',
+      leader: 'coinboy',
+      member: 98220034,
+      radio: false,
+    },
+    {
+      rank: 2,
+      name: 'coinboys',
+      leader: 'coinboy2',
+      member: 98220034,
+      radio: false,
+    },
+    {
+      rank: 3,
+      name: 'coinboys',
+      leader: 'coinboy3',
+      member: 98220034,
+      radio: false,
+    },
+    {
+      rank: 4,
+      name: 'coinboys',
+      leader: 'coinboy4',
+      member: 98220034,
+      radio: false,
+    },
+  ];
+
+
 
 
 
