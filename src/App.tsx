@@ -12,11 +12,17 @@ const App = () => {
   return (
     <Routes>
       <Route element={<Layout />}>
+        {/*}
         <Route path="/" element={<Navigate to="/squad" replace />}></Route>
+        */}
+        <Route path="/" element={<SquadPage />}></Route>
+
         <Route path="/node" element={<NodePage />}></Route>
         <Route path="/stake" element={<StakePage />}></Route>
         <Route path="/gp" element={<GpPage />}></Route>
+        
         <Route path="/squad" element={<SquadPage />}></Route>
+
         <Route path="*" element={<Navigate to="/" replace />}></Route>
       </Route>
     </Routes>

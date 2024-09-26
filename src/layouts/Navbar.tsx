@@ -26,7 +26,7 @@ const Navbar = () => {
     },
     {
       title: 'Squad',
-      link: '/squad',
+      link: '/',
       className:
         'squad-linear-gradient rounded-lg border border-[#FFFFFF1F] px-2.5 py-[3px] text-[#FFFFFF14]',
     },
