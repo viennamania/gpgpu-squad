@@ -10,18 +10,19 @@ const Navbar = () => {
   const location = useLocation();
   const [isShowDropdown, setIsShowDropdown] = useState(false);
   const setIsShowMenuDrawer = useSetRecoilState(menuDrawerState);
+
   const NAV_MENU = [
     {
       title: 'Node',
-      link: '/node',
+      link: 'https://node.gpgpu.ai/node',
     },
     {
       title: 'Stake',
-      link: '/stake',
+      link: 'https://node.gpgpu.ai/stake',
     },
     {
       title: '$GP',
-      link: '/gp',
+      link: 'https://node.gpgpu.ai/gp',
     },
     {
       title: 'Squad',
