@@ -9,6 +9,12 @@ import NuclearModal from '../modal/NuclearModal';
 import SquadAttackModal from '../modal/SquadAttackModal';
 import {squadState} from '../../atoms/squad';
 import {useRecoilValue} from 'recoil';
+
+import {useActiveAccount} from 'thirdweb/react';
+import {useAddUser} from '../../apis';
+
+
+
 const items = [
   {
     type: 'Attacker',
@@ -41,12 +47,21 @@ const items = [
     timeAgo: '3m ago',
   },
 ];
+
+
 const DashBoard = () => {
   const {addToast} = useToast();
   const squad = useRecoilValue(squadState);
   const [gpuGage, setGpuGage] = useState(3);
   const [currentIndex, setCurrentIndex] = useState(3);
   const [isTransitioning, setIsTransitioning] = useState(true);
+
+
+  const address = useActiveAccount()?.address;
+  const {data: userCode} = useAddUser({address});
+
+
+
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (currentIndex === items.length) {
@@ -74,6 +89,17 @@ const DashBoard = () => {
 
   return (
     <div className="w-full">
+
+      {/* userCode */}
+      <div className="hidden lg:flex justify-end gap-4">
+        <span className="text-[14px] leading-[22.4px] text-[#E5E5E5]">
+          User Code
+        </span>
+        <span className="text-[14px] leading-[22.4px] text-[#E5E5E5]">
+          {userCode}
+        </span>
+      </div>
+
       {/* status bar */}
       <div className="hidden h-[49px] items-center overflow-hidden lg:flex">
         <div

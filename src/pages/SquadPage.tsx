@@ -8,6 +8,7 @@ import {joinState, squadState} from '../atoms/squad';
 import useThirdWeb from '../hooks/useThirdWeb';
 import {useActiveAccount} from 'thirdweb/react';
 
+
 const SquadPage = () => {
   const {connectWallet} = useThirdWeb();
   const activeAccount = useActiveAccount();
@@ -15,11 +16,14 @@ const SquadPage = () => {
   const [squad, setSquad] = useRecoilState(squadState);
   const [isJoined, setIsJoined] = useRecoilState(joinState);
 
+
+
   return (
     <div>
       <Title title="Squad" subtitle="Get points by playing in the squad" />
 
       <div className="px-4 lg:px-6">
+
         <div className="mx-auto flex max-w-[1200px] flex-1">
           <button
             onClick={() =>
@@ -34,6 +38,7 @@ const SquadPage = () => {
             {isJoined ? 'join o' : 'join x'}
           </button>
         </div>
+
         <div className="mx-auto flex max-w-[1200px] flex-1">
           {!isJoined ? (
             step === 0 ? (

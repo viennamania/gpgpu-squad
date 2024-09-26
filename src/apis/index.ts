@@ -4,6 +4,8 @@ import {AxiosError, AxiosResponse} from 'axios';
 import {instance} from './instance';
 import useToast from '../hooks/useToast';
 
+
+
 interface AddUserParamsType {
   address?: string;
 }
@@ -19,6 +21,8 @@ export const useAddUser = (params: AddUserParamsType) => {
     enabled: !!params.address,
   });
 };
+
+
 
 type CheckUserResponse = {
   message: string;
