@@ -6,7 +6,7 @@ import SquadListTable from '../table/SquadListTable';
 import {useActiveAccount} from 'thirdweb/react';
 
 
-import {useGetUserGpuId, useMakeSquad} from '../../apis';
+import {useGetUserGpuId, useMakeSquad, useJoinSquad } from '../../apis';
 
 
 
@@ -22,6 +22,12 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
   >('leader');
 
   const [squadName, setSquadName] = useState('');
+
+
+  console.log('squdName======', squadName);
+
+
+
   const [applyState, setApplyState] = useState<'valid' | 'invalid' | 'default'>(
     'default',
   );
@@ -51,9 +57,11 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
         
         setApplyState('valid');
 
+        setGpuId(result?.data?.gpuId);
+
       }
 
-      setGpuId(result?.data?.gpuId || '');
+      
 
       
     }
@@ -103,9 +111,49 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
 
 
 
+  const {mutateAsync: joinSquadAsync, } = useJoinSquad();
 
-  const handleNextStep = () => {
-    setIsJoined(true);
+  const joinSquad = async ()  => {
+
+    console.log('joinSquad address', address);
+    console.log('joinSquad gpuId', gpuId);
+    console.log('joinSquad squadName', squadName);
+
+    const result = await joinSquadAsync({
+      address,
+      gpuId,
+      squadName,
+    });
+
+    console.log('joinSquadAsync result', result);
+
+    return result ? true : false;
+  };
+
+
+  const handleNextStep = async () => {
+
+    // selectedSquadType
+    // if selectedSquadType === 'member'
+
+    ////setIsJoined(true);
+
+
+    if (selectedSquadType === 'member') {
+      
+
+      const result = await joinSquad();
+
+      if (result) {
+        setIsJoined(true);
+      }
+
+
+
+    }
+
+
+
   };
 
 
@@ -114,6 +162,43 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
   useEffect(() => {
     setApplyState('default');
   }, [squadName, selectedSquadType]);
+
+
+
+
+
+  const [tableData, setTableData] = useState([
+    {
+      rank: 1,
+      name: 'coinboys',
+      leader: 'coinboy',
+      member: 98220034,
+      radio: false,
+    },
+    {
+      rank: 2,
+      name: 'coinboys',
+      leader: 'coinboy2',
+      member: 98220034,
+      radio: false,
+    },
+    {
+      rank: 3,
+      name: 'coinboys',
+      leader: 'coinboy3',
+      member: 98220034,
+      radio: false,
+    },
+    {
+      rank: 4,
+      name: 'coinboys',
+      leader: 'coinboy4',
+      member: 98220034,
+      radio: false,
+    },
+  ]);
+
+
 
 
 
@@ -248,7 +333,10 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
               </div>
             </div>
           ) : (
-            <SquadListTable setApplyState={setApplyState} />
+            <SquadListTable
+              squadData={tableData}
+              setApplyState={setApplyState}
+              setSelectedSquadName={setSquadName} />
           )}
         </div>
       </div>

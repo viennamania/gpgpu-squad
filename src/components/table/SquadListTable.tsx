@@ -17,11 +17,16 @@ type TableData = {
 };
 
 interface SquadListTablePropsType {
+  squadData: TableData[];
   setApplyState: Dispatch<SetStateAction<'valid' | 'invalid' | 'default'>>;
+  setSelectedSquadName: Dispatch<SetStateAction<string>>;
 }
 
-const SquadListTable = ({setApplyState}: SquadListTablePropsType) => {
+const SquadListTable = ({squadData, setApplyState, setSelectedSquadName}: SquadListTablePropsType) => {
+  
   const [currentPage, setCurrentPage] = useState(1);
+
+  /*
   const [tableData, setTableData] = useState([
     {
       rank: 1,
@@ -52,6 +57,11 @@ const SquadListTable = ({setApplyState}: SquadListTablePropsType) => {
       radio: false,
     },
   ]);
+  */
+
+  const [tableData, setTableData] = useState(squadData);
+
+
 
   useEffect(() => {
     const find = tableData.find((data) => data.radio);
@@ -158,13 +168,23 @@ const SquadListTable = ({setApplyState}: SquadListTablePropsType) => {
             <button
               onClick={() => {
                 setTableData((prev) => {
+
                   return prev.map((item, idx) => {
                     if (idx === props.row.index) {
+
+
+                      setSelectedSquadName(item.name);
+
+                      
                       return {...item, radio: true};
+
+
                     } else {
                       return {...item, radio: false};
                     }
                   });
+
+
                 });
               }}>
               <img src="/radio_selected.svg" />
@@ -177,7 +197,11 @@ const SquadListTable = ({setApplyState}: SquadListTablePropsType) => {
                 setTableData((prev) => {
                   return prev.map((item, idx) => {
                     if (idx === props.row.index) {
+
+                      setSelectedSquadName(item.name);
+
                       return {...item, radio: true};
+
                     } else {
                       return {...item, radio: false};
                     }

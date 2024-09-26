@@ -35,9 +35,11 @@ const FirstStep = ({setStep}: FirstStepPropsType) => {
         
         setApplyState('valid');
 
+        setGpuId(result?.data?.gpuId);
+
       }
 
-      setGpuId(result?.data?.gpuId || '');
+      
 
       
     }
@@ -76,6 +78,27 @@ const FirstStep = ({setStep}: FirstStepPropsType) => {
 
     if (result) {
       ///setApplyState('valid');
+
+
+      const fetch = async () => {
+        const result = await getGpuId();
+  
+        console.log('result===', result);
+  
+        if (result?.data?.gpuId) {
+          
+          setApplyState('valid');
+
+          setGpuId(result?.data?.gpuId);
+  
+        }
+        
+      }
+  
+      fetch();
+
+    
+
     } else {
       setGpuId('');
       ///setApplyState('invalid');

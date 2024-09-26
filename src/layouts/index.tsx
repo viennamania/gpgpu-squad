@@ -16,7 +16,7 @@ const Layout = () => {
   return (
     <Dialog.Root>
       <div
-        className={`relative mx-auto flex min-h-screen flex-col items-center ${location.pathname === '/squad' && 'squad_bg'} ${!isJoin && 'squad_bg_none'}`}>
+        className={`relative mx-auto flex min-h-screen flex-col items-center ${location.pathname === '/' && 'squad_bg'} ${!isJoin && 'squad_bg_none'}`}>
         <Navbar />
         <div
           className={`mt-[64px] w-full flex-1 ${isShowMenuDrawer && 'blur-md lg:blur-none'}`}>

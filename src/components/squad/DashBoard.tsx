@@ -13,6 +13,11 @@ import {useRecoilValue} from 'recoil';
 import {useActiveAccount} from 'thirdweb/react';
 import {useAddUser} from '../../apis';
 
+import {
+  useGetUserGpuId,
+  useGetUserSquad,
+} from '../../apis';
+
 
 
 const items = [
@@ -62,7 +67,79 @@ const DashBoard = () => {
   const {data: userCode} = useAddUser({address});
 
 
+
+
+
+  const [gpuId, setGpuId] = useState('');
+
+  const {refetch: getGpuId, isLoading} = useGetUserGpuId({address: address || ''});
   
+
+  useEffect(() => {
+    
+    const fetch = async () => {
+      const result = await getGpuId();
+
+      console.log('getGpuId result===', result);
+
+      if (result?.data?.gpuId) {
+        
+        ///setIsJoined(true);
+
+        setGpuId(result?.data?.gpuId);
+
+      }
+
+
+      
+
+      
+    }
+
+    address && fetch();
+
+
+  }, [address]);
+
+
+
+
+
+  const [squadName, setSquadName] = useState('');
+
+  const {refetch: getUserSquad, } = useGetUserSquad({address: address || ''});
+  
+
+  useEffect(() => {
+    
+    const fetch = async () => {
+      const result = await getUserSquad();
+
+      console.log('getUserSquad result===', result);
+
+      if (result?.data?.squadName) {
+        
+        //setIsJoined(true);
+
+        //setSquad('leader');
+
+        setSquadName(result?.data?.squadName);
+
+      }
+
+
+      
+
+      
+    }
+
+
+    address && fetch();
+
+
+  }, [address]);
+
+
 
 
 
@@ -282,7 +359,9 @@ const DashBoard = () => {
               </span>
               <div className="flex items-center gap-2">
                 <p className="text-[36px] font-medium leading-[43.2px] text-white">
-                  coinboys
+                  
+                  {squadName}
+
                 </p>
                 <span className="rounded-[100px] border border-[#1F1F1F] bg-[#0A0A0A4D] px-4 py-2 text-[16px] font-normal leading-[19.2px] text-[#8E9199]">
                   x2.5

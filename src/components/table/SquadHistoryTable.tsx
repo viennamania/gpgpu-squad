@@ -7,10 +7,23 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import {useState} from 'react';
+
 import StateTypeDropdown from '../squad/StateTypeDropdown';
 import {useRecoilValue} from 'recoil';
 import {squadState} from '../../atoms/squad';
+
+import {useActiveAccount} from 'thirdweb/react';
+import {useAddUser} from '../../apis';
+
+import {
+  useGetUserGpuId,
+  useGetUserSquad,
+} from '../../apis';
+
+import {useEffect, useState} from 'react';
+
+
+
 
 type TableData = {
   state: string;
@@ -23,6 +36,84 @@ const SquadHistoryTable = () => {
   const [stateType, setStateType] = useState('All');
   const [isShowDropdown, setIsShowDropdown] = useState(false);
   const squad = useRecoilValue(squadState);
+
+
+
+
+  const address = useActiveAccount()?.address;
+
+  const {data: userCode} = useAddUser({address});
+
+
+
+
+
+  const [gpuId, setGpuId] = useState('');
+
+  const {refetch: getGpuId, isLoading} = useGetUserGpuId({address: address || ''});
+  
+
+  useEffect(() => {
+    
+    const fetch = async () => {
+      const result = await getGpuId();
+
+      console.log('getGpuId result===', result);
+
+      if (result?.data?.gpuId) {
+        
+        ///setIsJoined(true);
+
+      }
+
+
+      setGpuId(result?.data?.gpuId || '');
+
+      
+    }
+
+    address && fetch();
+
+
+  }, [address]);
+
+
+  const [squadName, setSquadName] = useState('');
+
+  const {refetch: getUserSquad, } = useGetUserSquad({address: address || ''});
+  
+
+  useEffect(() => {
+    
+    const fetch = async () => {
+      const result = await getUserSquad();
+
+      console.log('getUserSquad result===', result);
+
+      if (result?.data?.squadName) {
+        
+        //setIsJoined(true);
+
+        //setSquad('leader');
+
+        
+
+      }
+
+
+      setSquadName(result?.data?.squadName || '');
+
+      
+    }
+
+
+    address && fetch();
+
+
+  }, [address]);
+
+
+
 
   const handleStateType = (type: string) => {
     setStateType(type);
@@ -177,7 +268,7 @@ const SquadHistoryTable = () => {
         </div>
         <div className="flex items-center gap-2">
           <span className="text-[12px] font-medium leading-[16.8px] text-[#E5E5E5]">
-            coinboy
+            {gpuId}
           </span>
           <span className="rounded-md bg-[#1A1A1A] px-2 py-1 text-[12px] font-medium leading-[16.8px] text-[#999EA7]">
             {squad === 'member' ? 'Member' : 'Leader'}

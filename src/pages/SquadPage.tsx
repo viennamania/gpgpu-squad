@@ -49,10 +49,12 @@ const SquadPage = () => {
         
         ///setIsJoined(true);
 
+        setGpuId(result?.data?.gpuId);
+
       }
 
 
-      setGpuId(result?.data?.gpuId || '');
+      
 
       
     }
@@ -84,12 +86,12 @@ const SquadPage = () => {
 
         setSquad('leader');
 
-        
+        setSquadName(result?.data?.squadName);
 
       }
 
 
-      setSquadName(result?.data?.squadName || '');
+      
 
       
     }
@@ -115,6 +117,7 @@ const SquadPage = () => {
 
       <div className="px-4 lg:px-6">
 
+        {/*
         <div className="mx-auto flex max-w-[1200px] flex-1">
           <button
             onClick={() =>
@@ -129,6 +132,18 @@ const SquadPage = () => {
             {isJoined ? 'join o' : 'join x'}
           </button>
         </div>
+        */}
+
+        {gpuId && (
+          <div className="mx-auto flex max-w-[1200px] flex-1">
+            {squad}{' '}gpuId: {gpuId}
+          </div>
+        )}
+
+      
+
+
+
 
         <div className="mx-auto flex max-w-[1200px] flex-1">
           {!isJoined ? (
