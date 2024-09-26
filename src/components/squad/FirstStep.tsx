@@ -1,32 +1,105 @@
 import {Dispatch, SetStateAction, useEffect, useState} from 'react';
 
+import {useActiveAccount} from 'thirdweb/react';
+
+
+import {useGetUserGpuId, useSetUserGpuId} from '../../apis';
+
+
+
 interface FirstStepPropsType {
   setStep: Dispatch<SetStateAction<number>>;
 }
 
 const FirstStep = ({setStep}: FirstStepPropsType) => {
+
+  const activeAccount = useActiveAccount();
+
+  const address = activeAccount?.address;
+
   const [gpuId, setGpuId] = useState('');
+
+
+
+  const {refetch: getGpuId, isLoading} = useGetUserGpuId({address: address || ''});
+  
+
+  useEffect(() => {
+    
+    const fetch = async () => {
+      const result = await getGpuId();
+
+      console.log('result===', result);
+
+      if (result?.data?.gpuId) {
+        
+        setApplyState('valid');
+
+      }
+
+      setGpuId(result?.data?.gpuId || '');
+
+      
+    }
+
+    fetch();
+
+
+  }, [address]);
+
+
   const [applyState, setApplyState] = useState<'valid' | 'invalid' | 'default'>(
     'default',
   );
 
-  const handleApply = () => {
-    const result = true; // 유효하지 않을 경우 false
+
+
+  const {mutateAsync: setUserGpuIdAsync, isPending} = useSetUserGpuId();
+
+
+  const setUserGpuId = async ()  => {
+
+    const result = await setUserGpuIdAsync({
+      address,
+      gpuId,
+    });
+
+    console.log('setUserGpuIdAsync result', result);
+
+    return result ? true : false;
+  };
+
+  const handleApply = async () => {
+    
+    //const result = true; // 유효하지 않을 경우 false
+    const result = await setUserGpuId();
+
     if (result) {
-      setApplyState('valid');
+      ///setApplyState('valid');
     } else {
       setGpuId('');
-      setApplyState('invalid');
+      ///setApplyState('invalid');
     }
   };
+
+
 
   const handleNextStep = () => {
     setStep(2);
   };
 
   useEffect(() => {
-    setApplyState('default');
+    
+    ///setApplyState('default');
+
+    setApplyState('invalid');
+
   }, [gpuId]);
+
+
+
+
+
 
   return (
     <div className="my-8 w-full">
@@ -61,51 +134,86 @@ const FirstStep = ({setStep}: FirstStepPropsType) => {
             <p className="text-[32px] font-medium leading-[38.4px] text-[#5B5E66]">
               {gpuId || 'gpuid'} <span className="text-[#FFFFFF]">.GPU</span>
             </p>
-            <p className="text-[14px] leading-[19.6px] text-[#8E9199]">
-              Please set the GPU ID to be active in the squad to 2 to 8
-              <br className="hidden lg:block" />
-              characters consisting of English and numbers
-              <br />
-              <br /> You cannot change it later
-            </p>
+
+            {applyState === 'invalid' && (
+              <p className="text-[14px] leading-[19.6px] text-[#8E9199]">
+                Please set the GPU ID to be active in the squad to 2 to 8
+                <br className="hidden lg:block" />
+                characters consisting of English and numbers
+                <br />
+                <br /> You cannot change it later
+              </p>
+            )}
           </div>
+
+
           <button
             onClick={handleNextStep}
+            
             disabled={applyState !== 'valid'}
+            
+
             className={`self-start rounded-[100px] px-6 py-[10px] text-[16px] leading-[20.8px] ${applyState !== 'valid' ? 'border border-[#4A4B4D] text-[#999EA7]' : 'bg-[#ffffff] text-[#010101]'} `}>
             Next Step
           </button>
         </div>
 
         {/* GPU ID */}
-        <div>
+        {applyState === 'valid' ? (
+        
+          <div>
+
+          </div>
+
+        ) : (
+
+          <div>
           <div className="flex w-full items-center justify-between gap-2 rounded-xl border border-[#40444B] bg-[#0101011A] p-6">
             <div className="flex flex-1 flex-col">
               <input
+                
+                disabled={isPending}
+
                 value={gpuId}
                 onChange={(e) => setGpuId(e.target.value)}
                 className="w-full bg-transparent text-[24px] font-medium leading-[28.8px] placeholder-[#5B5E66] outline-none"
                 placeholder="GPU ID"></input>
 
-              {applyState !== 'default' &&
+              {/*applyState !== 'default' &&
                 (applyState === 'valid' ? (
                   <span className="text-sm leading-[16.8px] text-[#03C397]">
                     available names
                   </span>
                 ) : (
                   <span className="text-sm leading-[16.8px] text-[#F26464]">
+                    
                     It's already in use
+
                   </span>
-                ))}
+                ))*/}
             </div>
-            <button
-              onClick={handleApply}
-              disabled={!gpuId}
-              className={`rounded-[100px] border border-[#4A4B4D] px-6 py-[9.5px] leading-[20.8px] ${!gpuId ? 'text-[#5F6166]' : 'text-[#FFFFFF]'} `}>
-              Apply
-            </button>
+
+           
+
+              <button
+                onClick={handleApply}
+                
+                disabled={!gpuId || isPending }
+
+                className={`rounded-[100px] border border-[#4A4B4D] px-6 py-[9.5px] leading-[20.8px] ${!gpuId ? 'text-[#5F6166]' : 'text-[#FFFFFF]'} `}>
+                Apply
+              </button>
+
+       
+
+
           </div>
         </div>
+
+
+        )}
+
+
       </div>
     </div>
   );

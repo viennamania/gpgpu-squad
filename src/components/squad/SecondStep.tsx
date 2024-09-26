@@ -1,22 +1,97 @@
 import {Dispatch, SetStateAction, useEffect, useState} from 'react';
 import SquadListTable from '../table/SquadListTable';
 
+
+
+import {useActiveAccount} from 'thirdweb/react';
+
+
+import {useGetUserGpuId, useMakeSquad} from '../../apis';
+
+
+
 interface SecondStepPropsType {
   setStep: Dispatch<SetStateAction<number>>;
   setIsJoined: Dispatch<SetStateAction<boolean>>;
 }
 
 const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
+
   const [selectedSquadType, setSelectedSquadType] = useState<
     'leader' | 'member'
   >('leader');
+
   const [squadName, setSquadName] = useState('');
   const [applyState, setApplyState] = useState<'valid' | 'invalid' | 'default'>(
     'default',
   );
 
-  const handleApply = () => {
-    const result = true; // 유효하지 않을 경우 false
+
+
+
+  const activeAccount = useActiveAccount();
+
+  const address = activeAccount?.address;
+
+  const [gpuId, setGpuId] = useState('');
+
+
+
+  const {refetch: getGpuId, isLoading} = useGetUserGpuId({address: address || ''});
+  
+
+  useEffect(() => {
+    
+    const fetch = async () => {
+      const result = await getGpuId();
+
+      console.log('result===', result);
+
+      if (result?.data?.gpuId) {
+        
+        setApplyState('valid');
+
+      }
+
+      setGpuId(result?.data?.gpuId || '');
+
+      
+    }
+
+    fetch();
+
+
+  }, [address]);
+
+
+
+
+  const {mutateAsync: makeSquadAsync, isPending} = useMakeSquad();
+
+  const makeSquad = async ()  => {
+
+    console.log('useMakeSquad address', address);
+    console.log('useMakeSquad gpuId', gpuId);
+    console.log('useMakeSquad squadName', squadName);
+
+    const result = await makeSquadAsync({
+      address,
+      gpuId,
+      squadName,
+    });
+
+    console.log('result', result);
+
+    return result ? true : false;
+  };
+
+
+  const handleApply = async () => {
+    
+    ///const result = true; // 유효하지 않을 경우 false
+    const result = await makeSquad();
+
+
     if (result) {
       setApplyState('valid');
     } else {
@@ -25,13 +100,24 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
     }
   };
 
+
+
+
+
   const handleNextStep = () => {
     setIsJoined(true);
   };
 
+
+
+
   useEffect(() => {
     setApplyState('default');
   }, [squadName, selectedSquadType]);
+
+
+
+
 
   return (
     <div className="my-8 w-full">

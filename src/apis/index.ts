@@ -46,6 +46,8 @@ export const useCheckUserByCode = (params: {code: string}) => {
   });
 };
 
+
+
 interface CheckWhitelistParamsType {
   address?: string;
 }
@@ -140,4 +142,119 @@ export const useUserClaimedInfo = (): UseMutationResult<
   >({
     mutationFn: (params: UserClaimedParamsType) => userClaimedInfo(params),
   });
+};
+
+
+
+
+
+
+
+
+
+
+
+
+interface setUserGpuIdParamsType {
+  address?: string;
+  gpuId?: string; // coinboys
+}
+
+export const useSetUserGpuId = () => {
+  const {addToast} = useToast();
+
+  const setUserGpuId = (params: setUserGpuIdParamsType) =>
+    instance.get('/setUserGpuId', {params});
+
+  return useMutation({
+    mutationFn: (params: setUserGpuIdParamsType) => setUserGpuId(params),
+    onSuccess: (data) => {
+      addToast('success', data.data.message);
+    },
+  });
+
+};
+
+
+
+
+type getUserGpuIdResponse = {
+  message: string;
+  gpuId: string;
+};
+
+export const useGetUserGpuId = (params: {address: string}) => {
+
+  const getUserGpuId = async (params: {address: string}) => {
+    const response = await instance.get<getUserGpuIdResponse>('/getUserGpuId', {
+      params,
+    });
+
+    ///console.log('response', response);
+
+    return response.data;
+  };
+
+
+
+  return useQuery<getUserGpuIdResponse, Error>({
+    queryKey: ['getUserGpuId', params.address],
+    queryFn: () => getUserGpuId({address: params.address}),
+    select: (data) => data,
+    enabled: false,
+    retry: 0,
+  });
+
+};
+
+
+
+
+
+interface makeSquadParamsType {
+  address?: string;
+  gpuId?: string; // coinboys
+  squadName?: string;
+}
+
+export const useMakeSquad = () => {
+  const {addToast} = useToast();
+
+
+
+  const makeSquad = (params: makeSquadParamsType) =>
+    instance.get('/makeSquad', {params});
+
+
+
+  return useMutation({
+    mutationFn: (params: makeSquadParamsType) => makeSquad(params),
+    onSuccess: (data) => {
+      addToast('success', data.data.message);
+    },
+  });
+
+};
+
+
+
+interface JoinSquadParamsType {
+  address?: string;
+  gpuId?: string; // coinboys
+  squadName?: string;
+}
+
+export const useJoinSquad = () => {
+  const {addToast} = useToast();
+
+  const joinSquad = (params: JoinSquadParamsType) =>
+    instance.get('/joinSquad', {params});
+
+  return useMutation({
+    mutationFn: (params: JoinSquadParamsType) => joinSquad(params),
+    onSuccess: (data) => {
+      addToast('success', data.data.message);
+    },
+  });
+
 };

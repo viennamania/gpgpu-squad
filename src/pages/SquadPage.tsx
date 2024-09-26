@@ -1,4 +1,4 @@
-import {useState} from 'react';
+
 import Title from '../layouts/Title';
 import FirstStep from '../components/squad/FirstStep';
 import SecondStep from '../components/squad/SecondStep';
@@ -7,6 +7,13 @@ import {useRecoilState} from 'recoil';
 import {joinState, squadState} from '../atoms/squad';
 import useThirdWeb from '../hooks/useThirdWeb';
 import {useActiveAccount} from 'thirdweb/react';
+
+import {useEffect, useState} from 'react';
+
+
+
+
+import {useGetUserGpuId} from '../apis';
 
 
 const SquadPage = () => {
@@ -18,7 +25,44 @@ const SquadPage = () => {
   const [isJoined, setIsJoined] = useRecoilState(joinState);
 
 
-  console.log('activeAccount', activeAccount);
+
+  const address = activeAccount?.address;
+
+  const [gpuId, setGpuId] = useState('');
+
+
+  console.log('address', address);
+  console.log('gpuId', gpuId);
+
+
+  const {refetch: getGpuId, isLoading} = useGetUserGpuId({address: address || ''});
+  
+
+  useEffect(() => {
+    
+    const fetch = async () => {
+      const result = await getGpuId();
+
+      console.log('result===', result);
+
+      if (result?.data?.gpuId) {
+        
+        ///setIsJoined(true);
+
+      }
+
+
+      setGpuId(result?.data?.gpuId || '');
+
+      
+    }
+
+    fetch();
+
+
+  }, [address]);
+
+
 
 
   return (

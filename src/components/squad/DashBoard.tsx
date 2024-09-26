@@ -58,6 +58,7 @@ const DashBoard = () => {
 
 
   const address = useActiveAccount()?.address;
+
   const {data: userCode} = useAddUser({address});
 
 
@@ -91,6 +92,7 @@ const DashBoard = () => {
     <div className="w-full">
 
       {/* userCode */}
+      {/*
       <div className="hidden lg:flex justify-end gap-4">
         <span className="text-[14px] leading-[22.4px] text-[#E5E5E5]">
           User Code
@@ -99,6 +101,8 @@ const DashBoard = () => {
           {userCode}
         </span>
       </div>
+      */}
+
 
       {/* status bar */}
       <div className="hidden h-[49px] items-center overflow-hidden lg:flex">
