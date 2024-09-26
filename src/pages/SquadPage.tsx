@@ -10,12 +10,15 @@ import {useActiveAccount} from 'thirdweb/react';
 
 
 const SquadPage = () => {
+
   const {connectWallet} = useThirdWeb();
   const activeAccount = useActiveAccount();
   const [step, setStep] = useState(0);
   const [squad, setSquad] = useRecoilState(squadState);
   const [isJoined, setIsJoined] = useRecoilState(joinState);
 
+
+  console.log('activeAccount', activeAccount);
 
 
   return (
@@ -61,7 +64,7 @@ const SquadPage = () => {
                   You can earn both personal and squad rewards
                 </p>
 
-                {!activeAccount?.address ? (
+                {activeAccount?.address ? (
                   <button
                     onClick={() => setStep(1)}
                     className="leading-20.8px] mt-5 flex h-10 items-center gap-1 rounded-[100px] border bg-white px-[18px] py-2.5 text-center">
