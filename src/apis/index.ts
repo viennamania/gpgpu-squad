@@ -211,6 +211,14 @@ export const useGetUserGpuId = (params: {address: string}) => {
 
 
 
+
+
+
+
+
+
+
+
 interface makeSquadParamsType {
   address?: string;
   gpuId?: string; // coinboys
@@ -235,6 +243,45 @@ export const useMakeSquad = () => {
   });
 
 };
+
+
+
+
+type getUserSquadResponse = {
+  message: string;
+  gpuId: string;
+  squadName: string;
+};
+
+export const useGetUserSquad = (params: {address: string}) => {
+
+  const getUserSquad = async (params: {address: string}) => {
+    const response = await instance.get<getUserSquadResponse>('/getUserSquad', {
+      params,
+    });
+
+    ///console.log('response', response);
+
+    return response.data;
+  };
+
+
+
+  return useQuery<getUserSquadResponse, Error>({
+    queryKey: ['getUserSquad', params.address],
+    queryFn: () => getUserSquad({address: params.address}),
+    select: (data) => data,
+    enabled: false,
+    retry: 0,
+  });
+
+};
+
+
+
+
+
+
 
 
 

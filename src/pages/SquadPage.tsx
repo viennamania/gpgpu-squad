@@ -13,7 +13,10 @@ import {useEffect, useState} from 'react';
 
 
 
-import {useGetUserGpuId} from '../apis';
+import {
+  useGetUserGpuId,
+  useGetUserSquad,
+} from '../apis';
 
 
 const SquadPage = () => {
@@ -28,12 +31,9 @@ const SquadPage = () => {
 
   const address = activeAccount?.address;
 
+
+
   const [gpuId, setGpuId] = useState('');
-
-
-  console.log('address', address);
-  console.log('gpuId', gpuId);
-
 
   const {refetch: getGpuId, isLoading} = useGetUserGpuId({address: address || ''});
   
@@ -43,7 +43,7 @@ const SquadPage = () => {
     const fetch = async () => {
       const result = await getGpuId();
 
-      console.log('result===', result);
+      console.log('getGpuId result===', result);
 
       if (result?.data?.gpuId) {
         
@@ -57,10 +57,54 @@ const SquadPage = () => {
       
     }
 
-    fetch();
+    address && fetch();
 
 
   }, [address]);
+
+
+
+
+
+  const [squadName, setSquadName] = useState('');
+
+  const {refetch: getUserSquad, } = useGetUserSquad({address: address || ''});
+  
+
+  useEffect(() => {
+    
+    const fetch = async () => {
+      const result = await getUserSquad();
+
+      console.log('getUserSquad result===', result);
+
+      if (result?.data?.squadName) {
+        
+        setIsJoined(true);
+
+        setSquad('leader');
+
+        
+
+      }
+
+
+      setSquadName(result?.data?.squadName || '');
+
+      
+    }
+
+
+    address && fetch();
+
+
+  }, [address]);
+
+
+
+
+
+
 
 
 
