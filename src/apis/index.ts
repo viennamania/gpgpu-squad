@@ -251,6 +251,7 @@ type getUserSquadResponse = {
   message: string;
   gpuId: string;
   squadName: string;
+  squad: string;
 };
 
 export const useGetUserSquad = (params: {address: string}) => {
@@ -305,3 +306,33 @@ export const useJoinSquad = () => {
   });
 
 };
+
+
+
+// useGetSquadList
+
+type getSquadListResponse = {
+  message: string;
+  data: any[];
+};
+
+export const useGetSquadList = () => {
+  
+    const getSquadList = async () => {
+
+      const response = await instance.get<getSquadListResponse>('/getSquadList');
+  
+      //console.log('useGetSquadList response.data', response.data);
+  
+      return response.data;
+    };
+
+    return useQuery<getSquadListResponse, Error>({
+      queryKey: ['getSquadList'],
+      queryFn: () => getSquadList(),
+      select: (data) => data,
+      enabled: false,
+      retry: 0,
+    });
+
+}

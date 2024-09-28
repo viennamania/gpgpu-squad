@@ -19,6 +19,7 @@ import {
 } from '../apis';
 
 
+
 const SquadPage = () => {
 
   const {connectWallet} = useThirdWeb();
@@ -37,10 +38,11 @@ const SquadPage = () => {
 
   const {refetch: getGpuId, isLoading} = useGetUserGpuId({address: address || ''});
   
+
   console.log('isLoading===', isLoading);
 
-  
 
+  
   useEffect(() => {
     
     const fetch = async () => {
@@ -54,18 +56,39 @@ const SquadPage = () => {
 
         setGpuId(result?.data?.gpuId);
 
+        
+
+      } else {
+        setGpuId('');
       }
 
-
-      
-
-      
     }
 
     address && fetch();
 
-
   }, [address]);
+  
+
+
+  
+  useEffect(() => {
+
+    if (!address) {
+
+      setStep(0);
+
+      setIsJoined(false);
+
+      setGpuId('');
+
+      setSquadName('');
+
+    }
+
+  } , [address]);
+
+
+
 
 
 
@@ -75,12 +98,10 @@ const SquadPage = () => {
 
   console.log('squdName======', squadName);
 
-
   const {refetch: getUserSquad, } = useGetUserSquad({address: address || ''});
   
-
   useEffect(() => {
-    
+
     const fetch = async () => {
       const result = await getUserSquad();
 
@@ -90,28 +111,38 @@ const SquadPage = () => {
         
         setIsJoined(true);
 
-        setSquad('leader');
+        //setSquad('member');
 
         setSquadName(result?.data?.squadName);
 
+        setSquad(result?.data?.squad === 'leader' ? 'leader' : 'member');
+ 
+      } else {
+        setSquadName('');
       }
-
-
-      
-
       
     }
 
-
     address && fetch();
-
 
   }, [address]);
 
 
 
 
+  useEffect(() => {
 
+    if (!squadName) {
+
+      setStep(0);
+
+      setIsJoined(false);
+
+    }
+
+  } , [squadName]);
+
+  console.log('step===', step);
 
 
 
@@ -140,9 +171,13 @@ const SquadPage = () => {
         </div>
         */}
 
-        {gpuId && (
-          <div className="mx-auto flex max-w-[1200px] flex-1">
+        {address && gpuId && (
+          <div className="mx-auto flex max-w-[1200px] flex-1 mt-5 mb-5">
+            <h3 className="text-[24px] font-medium ">
+           
             {squad}{' '}gpuId: {gpuId}
+
+            </h3>
           </div>
         )}
 

@@ -1,0 +1,22 @@
+<svg width="123" height="40" viewBox="0 0 123 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="mask0_238_39499" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="123" height="40">
+<rect width="123" height="40" fill="url(#paint0_angular_238_39499)"/>
+</mask>
+<g mask="url(#mask0_238_39499)">
+<rect x="0.5" y="0.5" width="122" height="39" rx="19.5" stroke="url(#paint1_linear_238_39499)"/>
+</g>
+<defs>
+<radialGradient id="paint0_angular_238_39499" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(61.5 20) scale(61.5 151.667)">
+<stop offset="0.321352" stop-color="#D9D9D9"/>
+<stop offset="0.436125" stop-color="#D9D9D9" stop-opacity="0"/>
+<stop offset="0.613007" stop-color="#D9D9D9" stop-opacity="0"/>
+<stop offset="0.932089" stop-color="#D9D9D9" stop-opacity="0"/>
+<stop offset="0.992519" stop-color="#D9D9D9"/>
+</radialGradient>
+<linearGradient id="paint1_linear_238_39499" x1="0" y1="20.5263" x2="123" y2="20.5263" gradientUnits="userSpaceOnUse">
+<stop stop-color="#9D9C9D"/>
+<stop offset="0.505" stop-color="#E7E7E7"/>
+<stop offset="1" stop-color="white"/>
+</linearGradient>
+</defs>
+</svg>

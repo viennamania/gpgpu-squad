@@ -6,7 +6,14 @@ import SquadListTable from '../table/SquadListTable';
 import {useActiveAccount} from 'thirdweb/react';
 
 
-import {useGetUserGpuId, useMakeSquad, useJoinSquad } from '../../apis';
+import {
+  useGetUserGpuId,
+  useGetUserSquad,
+  useMakeSquad,
+  useJoinSquad,
+  useGetSquadList,
+} from '../../apis';
+
 
 
 
@@ -21,12 +28,9 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
     'leader' | 'member'
   >('leader');
 
-  const [squadName, setSquadName] = useState('');
 
 
-  ///console.log('squdName======', squadName);
-
-
+ 
 
   const [applyState, setApplyState] = useState<'valid' | 'invalid' | 'default'>(
     'default',
@@ -39,9 +43,9 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
 
   const address = activeAccount?.address;
 
+
+
   const [gpuId, setGpuId] = useState('');
-
-
 
   const {refetch: getGpuId, isLoading} = useGetUserGpuId({address: address || ''});
   
@@ -57,22 +61,70 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
       console.log('result===', result);
 
       if (result?.data?.gpuId) {
-        
-        setApplyState('valid');
 
         setGpuId(result?.data?.gpuId);
 
       }
-
-      
-
       
     }
 
     fetch();
 
+  }, [address]);
+
+
+
+  const [startSquad, setStartSquad] = useState(false);
+
+
+
+
+  const [squadName, setSquadName] = useState('');
+
+  console.log('squdName======', squadName);
+
+  const {refetch: getUserSquad, } = useGetUserSquad({address: address || ''});
+  
+  useEffect(() => {
+
+    const fetch = async () => {
+      const result = await getUserSquad();
+
+      console.log('getUserSquad result===', result);
+
+      if (result?.data?.squadName) {
+        
+        setIsJoined(true);
+
+        ///setSquad('leader');
+
+        setSquadName(result?.data?.squadName);
+
+        setStartSquad(true);
+
+ 
+      } else {
+        setSquadName('');
+      }
+      
+    }
+
+    address && fetch();
 
   }, [address]);
+
+
+
+
+
+
+
+
+
+
+
+
+  const [squadNameInput, setSquadNameInput] = useState('');
 
 
 
@@ -83,12 +135,12 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
 
     console.log('useMakeSquad address', address);
     console.log('useMakeSquad gpuId', gpuId);
-    console.log('useMakeSquad squadName', squadName);
+    console.log('useMakeSquad squadNameInput', squadNameInput);
 
     const result = await makeSquadAsync({
-      address,
-      gpuId,
-      squadName,
+      address: address || '',
+      gpuId: gpuId || '',
+      squadName: squadNameInput,
     });
 
     console.log('result', result);
@@ -120,12 +172,12 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
 
     console.log('joinSquad address', address);
     console.log('joinSquad gpuId', gpuId);
-    console.log('joinSquad squadName', squadName);
+    console.log('joinSquad squadNameInput', squadNameInput);
 
     const result = await joinSquadAsync({
-      address,
-      gpuId,
-      squadName,
+      address: address || '',
+      gpuId: gpuId || '',
+      squadName: squadName,
     });
 
     console.log('joinSquadAsync result', result);
@@ -148,10 +200,21 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
       const result = await joinSquad();
 
       if (result) {
+
         setIsJoined(true);
+
+        setSquadName(squadNameInput);
+
+      } else {
+        setIsJoined(false);
       }
 
 
+
+
+    } else {
+
+      setStep(0);
 
     }
 
@@ -163,44 +226,18 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
 
 
   useEffect(() => {
-    setApplyState('default');
+
+    if (squadName && selectedSquadType === 'member') {
+      setStartSquad(true);
+    } else {
+      setStartSquad(false);
+    }
+
   }, [squadName, selectedSquadType]);
 
+  
 
 
-
-  /*
-  const [tableData, setTableData] = useState([
-    {
-      rank: 1,
-      name: 'coinboys',
-      leader: 'coinboy',
-      member: 98220034,
-      radio: false,
-    },
-    {
-      rank: 2,
-      name: 'coinboys',
-      leader: 'coinboy2',
-      member: 98220034,
-      radio: false,
-    },
-    {
-      rank: 3,
-      name: 'coinboys',
-      leader: 'coinboy3',
-      member: 98220034,
-      radio: false,
-    },
-    {
-      rank: 4,
-      name: 'coinboys',
-      leader: 'coinboy4',
-      member: 98220034,
-      radio: false,
-    },
-  ]);
-  */
   const tableData = [
     {
       rank: 1,
@@ -234,6 +271,91 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
 
 
 
+  const [squadData, setSquadData] = useState(tableData);
+
+  const {refetch: getSquadList} = useGetSquadList();
+  useEffect(() => {
+    
+    const fetch = async () => {
+      const result = await getSquadList();
+
+      console.log('getSquadList result', result);
+      
+
+      if (result?.data?.data) {
+        /*
+        [
+          {
+              "_id": "66f52c58bdbbcb3a37663bc3",
+              "createdAt": "2024-09-26T09:41:44.698Z",
+              "walletAddress": "0x164Ec01A0811207f40660e28Fa49059977EC41E5",
+              "gpuId": "jack",
+              "squadName": "jacks room"
+          },
+          {
+              "_id": "66f5108b222c23c82820b1fe",
+              "createdAt": "2024-09-26T07:43:07.806Z",
+              "walletAddress": "0x5F218A6154FEBcB2649A88e983f7B69090BfdF47",
+              "gpuId": "jenna",
+              "squadName": "vienna"
+          },
+          {
+              "_id": "66f4f367f6e7c4a43fe313d7",
+              "createdAt": "2024-09-26T05:38:47.830Z",
+              "walletAddress": "0x222d0Cf4c3d041B5a3ae0EAfC915D2d1aCC78b9D",
+              "gpuId": "nevertry",
+              "squadName": "songpa"
+          }
+        ]
+        */
+
+        const squadList = result?.data?.data.map((item: any) => {
+          return {
+            rank: 1,
+            name: item.squadName,
+            leader: item.gpuId,
+            member: 2333,
+            radio: false,
+          };
+        } );
+          
+          setSquadData(squadList);
+
+      }
+      
+    }
+
+    fetch();
+
+  }, []);
+
+
+
+  ///console.log('squadData==========', squadData);
+
+
+
+
+
+
+  /*
+  useEffect(() => {
+    // get squad data from api
+
+    const fetch = async () => {
+      
+      const result = await axios.get('/getSquadList');
+
+      console.log('getSquadList result.data', result?.data);
+
+      setSquadData(result?.data?.squadList);
+
+    }
+
+    fetch();
+
+  }, []);
+  */
 
 
 
@@ -280,8 +402,9 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
           </div>
           <button
             onClick={handleNextStep}
-            disabled={applyState !== 'valid'}
-            className={`self-start rounded-[100px] px-6 py-[10px] text-[16px] leading-[20.8px] ${applyState !== 'valid' ? 'border border-[#4A4B4D] text-[#999EA7]' : 'bg-[#ffffff] text-[#010101]'} `}>
+            //disabled={applyState !== 'valid'}
+            disabled={!startSquad}
+            className={`self-start rounded-[100px] px-6 py-[10px] text-[16px] leading-[20.8px] ${!startSquad ? 'border border-[#4A4B4D] text-[#999EA7]' : 'bg-[#ffffff] text-[#010101]'} `}>
             Start Squad
           </button>
         </div>
@@ -289,9 +412,14 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
         {/* Squad Type */}
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-2 lg:flex-row">
+
             <button
               className="flex-1"
-              onClick={() => setSelectedSquadType('leader')}>
+              onClick={() => (
+                setSelectedSquadType('leader'), setSquadNameInput(''), setSquadName('')
+              )}>
+              
+
               <div
                 className={`flex w-full items-start justify-between rounded-xl border p-6 border-[${selectedSquadType === 'leader' ? '#E5E5E5' : '#40444B'}] bg-[#0101011A]`}>
                 <div className="flex flex-col gap-2">
@@ -311,9 +439,13 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
                 />
               </div>
             </button>
+
             <button
               className="flex-1"
-              onClick={() => setSelectedSquadType('member')}>
+              onClick={() => (
+                setSelectedSquadType('member'), setSquadNameInput(''), setSquadName('')
+              )}>
+
               <div
                 className={`flex items-start justify-between rounded-xl border p-6 border-[${selectedSquadType === 'member' ? '#E5E5E5' : '#40444B'}] bg-[#0101011A]`}>
                 <div className="flex flex-col gap-2">
@@ -344,13 +476,13 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
               <div className="flex flex-row items-center justify-between gap-2 border-[#40444B] bg-[#0101011A] lg:flex-row">
                 <div className="flex flex-1 flex-col">
                   <input
-                    value={squadName}
-                    onChange={(e) => setSquadName(e.target.value)}
+                    value={squadNameInput}
+                    onChange={(e) => setSquadNameInput(e.target.value)}
                     className="w-full bg-transparent text-[24px] font-medium leading-[28.8px] placeholder-[#5B5E66] outline-none"
                     placeholder="Squad Name"></input>
 
                   {applyState !== 'default' &&
-                    (applyState === 'valid' ? (
+                    (squadNameInput ? (
                       <span className="text-sm leading-[16.8px] text-[#03C397]">
                         you can use it
                       </span>
@@ -362,15 +494,15 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
                 </div>
                 <button
                   onClick={handleApply}
-                  disabled={!squadName}
-                  className={`rounded-[100px] border border-[#4A4B4D] px-6 py-[9.5px] leading-[20.8px] ${!squadName ? 'text-[#5F6166]' : 'text-[#FFFFFF]'} `}>
+                  disabled={!squadNameInput}
+                  className={`rounded-[100px] border border-[#4A4B4D] px-6 py-[9.5px] leading-[20.8px] ${!squadNameInput ? 'text-[#5F6166]' : 'text-[#FFFFFF]'} `}>
                   Apply
                 </button>
               </div>
             </div>
           ) : (
             <SquadListTable
-              squadData={tableData}
+              squadData={squadData}
               setApplyState={setApplyState}
               setSelectedSquadName={setSquadName} />
           )}

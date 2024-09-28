@@ -6,12 +6,16 @@ import {useActiveAccount} from 'thirdweb/react';
 import {useGetUserGpuId, useSetUserGpuId} from '../../apis';
 
 
+import useToast from '../../hooks/useToast';
+
 
 interface FirstStepPropsType {
   setStep: Dispatch<SetStateAction<number>>;
 }
 
 const FirstStep = ({setStep}: FirstStepPropsType) => {
+
+  const {addToast} = useToast();
 
   const activeAccount = useActiveAccount();
 
@@ -40,15 +44,13 @@ const FirstStep = ({setStep}: FirstStepPropsType) => {
 
         setGpuId(result?.data?.gpuId);
 
+        setStep(2);
+
       }
 
-      
-
-      
     }
 
     fetch();
-
 
   }, [address]);
 
@@ -64,20 +66,30 @@ const FirstStep = ({setStep}: FirstStepPropsType) => {
 
   const setUserGpuId = async ()  => {
 
-    const result = await setUserGpuIdAsync({
-      address,
-      gpuId,
-    });
+    try {
+      const result = await setUserGpuIdAsync({
+        address,
+        gpuId,
+      });
 
-    ///console.log('setUserGpuIdAsync result', result);
+      console.log('setUserGpuIdAsync result', result);
 
-    return result ? true : false;
+      return result ? true : false;
+
+    } catch (error) {
+      console.log('setUserGpuIdAsync error', error);
+      return false;
+    }
+
   };
+
 
   const handleApply = async () => {
     
     //const result = true; // 유효하지 않을 경우 false
     const result = await setUserGpuId();
+
+    ///console.log('setUserGpuId result===', result);
 
     if (result) {
       ///setApplyState('valid');
@@ -90,9 +102,11 @@ const FirstStep = ({setStep}: FirstStepPropsType) => {
   
         if (result?.data?.gpuId) {
           
-          setApplyState('valid');
+          ///setApplyState('valid');
 
           setGpuId(result?.data?.gpuId);
+
+          setStep(2);
   
         }
         
@@ -103,8 +117,15 @@ const FirstStep = ({setStep}: FirstStepPropsType) => {
     
 
     } else {
-      setGpuId('');
+
+      //setGpuId('');
       ///setApplyState('invalid');
+
+      // toast already in use
+
+      addToast('fail', 'It is already in use');
+ 
+
     }
   };
 
