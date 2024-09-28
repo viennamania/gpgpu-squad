@@ -157,6 +157,10 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
 
     if (result) {
       setApplyState('valid');
+
+      setSquadName(squadNameInput);
+      setStep(0);
+
     } else {
       setSquadName('');
       setApplyState('invalid');
@@ -202,8 +206,8 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
       if (result) {
 
         setIsJoined(true);
-
-        setSquadName(squadNameInput);
+        
+        setStep(0);
 
       } else {
         setIsJoined(false);

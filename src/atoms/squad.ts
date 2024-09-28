@@ -1,8 +1,8 @@
 import {atom} from 'recoil';
 
-export const squadState = atom<'member' | 'leader'>({
+export const squadState = atom<'' | 'member' | 'leader'>({
   key: 'squadType',
-  default: 'member',
+  default: '',
 });
 export const joinState = atom<boolean>({
   key: 'joinState',

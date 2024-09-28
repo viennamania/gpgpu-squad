@@ -115,7 +115,7 @@ const SquadPage = () => {
 
         setSquadName(result?.data?.squadName);
 
-        setSquad(result?.data?.squad === 'leader' ? 'leader' : 'member');
+        setSquad(result?.data?.squad === 'leader' ? 'leader' : result?.data?.squad === 'member' ? 'member' : '');
  
       } else {
         setSquadName('');
