@@ -16,6 +16,7 @@ import {useActiveAccount} from 'thirdweb/react';
 import {
   useGetUserGpuId,
   useGetUserSquad,
+  useActivateGpu,
 } from '../../apis';
 
 
@@ -55,9 +56,12 @@ const items = [
 
 
 const DashBoard = () => {
+
   const {addToast} = useToast();
   const squad = useRecoilValue(squadState);
-  const [gpuGage, setGpuGage] = useState(3);
+  
+  const [gpuGage, setGpuGage] = useState(43);
+
   const [currentIndex, setCurrentIndex] = useState(3);
   const [isTransitioning, setIsTransitioning] = useState(true);
 
@@ -71,6 +75,8 @@ const DashBoard = () => {
 
 
   const [gpuId, setGpuId] = useState('');
+  const [virtualGpu, setVirtualGpu] = useState(0);
+  const [durationInSecond, setDurationInSecond] = useState(0);
 
   console.log('gpuId===', gpuId);
 
@@ -92,6 +98,20 @@ const DashBoard = () => {
 
         setGpuId(result?.data?.gpuId);
 
+        setVirtualGpu(result?.data?.virtualGpu || 0);
+
+        setDurationInSecond(result?.data?.durationInSecond || 0);
+
+        //console.log('durationInSecond===', result?.data?.durationInSecond);
+
+         // gpuGage is between 0 and 43
+
+         if (result?.data?.durationInSecond === 0) {
+
+          setGpuGage(43);
+
+         }
+
       }
 
 
@@ -101,6 +121,14 @@ const DashBoard = () => {
     }
 
     address && fetch();
+
+    // fetch data every 1 seconds
+
+    const intervalId = setInterval(() => {
+      address && fetch();
+    }, 1000);
+
+    return () => clearInterval(intervalId);
 
 
   }, [address]);
@@ -147,6 +175,9 @@ const DashBoard = () => {
 
         setSquadRank(result?.data?.squadRank || 0);
 
+
+       
+
       }
 
 
@@ -187,13 +218,65 @@ const DashBoard = () => {
     return () => clearInterval(intervalId);
   }, [currentIndex]);
 
+
   useEffect(() => {
     if (squad === 'member') {
-      setGpuGage(5);
+      
+      //setGpuGage(5);
+
     } else {
-      setGpuGage(43);
+
+      //setGpuGage(43);
+
     }
   }, [squad]);
+
+
+
+
+
+
+
+
+  const {mutateAsync: activateGpuAsync} = useActivateGpu();
+
+  const activateGpu = async ()  => {
+
+    const result = await activateGpuAsync({
+      address: address || '',
+    });
+
+    console.log('result', result);
+
+    return result;
+  };
+
+
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleActivateGpu = async () => {
+
+    setIsLoading(true);
+
+    const result = await activateGpu();
+
+    console.log('activateGpu result.data', result?.data);
+
+    if (result) {
+
+    } else {
+      
+    }
+
+    setIsLoading(false);
+  };
+
+
+
+
+
+
 
   return (
     <div className="w-full">
@@ -501,7 +584,9 @@ const DashBoard = () => {
               My Virtual GPU
             </span>
             <span className="text-[32px] font-medium leading-[41.6px] text-white">
-              523,670
+              {
+                Number(virtualGpu).toLocaleString()
+              }
             </span>
             <div className="flex gap-1">
               {Array.from({length: 43}).map((_, index) => (
@@ -522,18 +607,40 @@ const DashBoard = () => {
           <div className="flex items-center justify-between">
             <div className="flex flex-col gap-1">
               <span className="h-8 self-start rounded-md bg-[#1B1C1F] px-3 py-[5px] text-[16px] font-normal leading-[19.2px] text-[#999EA7]">
-                0h 0m 0s
+                
+                {/*0h 0m 0s*/}
+                {/* durationInSecond */}
+
+                {
+                  new Date(durationInSecond * 1000).toISOString().substr(11, 8)
+                }
+
+
               </span>
               <p className="text-[14px] font-normal leading-[16.8px] text-[#5D6066]">
                 Earn <span className="text-[#E5E5E5]">20</span> points per
                 active
               </p>
             </div>
-            <button
-              disabled={gpuGage !== 43}
-              className={`rounded-[100px] px-6 py-2.5 text-[16px] font-medium leading-[20.8px] ${gpuGage !== 43 ? 'border border-[#4A4B4D] bg-transparent text-[#999EA7]' : 'bg-white text-[#010101]'}`}>
-              Active
-            </button>
+
+            {isLoading ? (
+              <button
+                className="h-12 w-36 rounded-lg bg-[#4A4B4D] p-2.5 text-center text-[16px] font-medium leading-[24px] text-[#010101]"
+              >
+                Activating...
+              </button>
+            ) : (
+              <button
+                disabled={gpuGage !== 43}
+                className={`rounded-[100px] px-6 py-2.5 text-[16px] font-medium leading-[20.8px] ${gpuGage !== 43 ? 'border border-[#4A4B4D] bg-transparent text-[#999EA7]' : 'bg-white text-[#010101]'}`}
+                onClick={handleActivateGpu}
+              >
+                
+                Active
+              </button>
+            )}
+
+
           </div>
         </div>
 

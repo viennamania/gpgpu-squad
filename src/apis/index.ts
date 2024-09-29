@@ -5,7 +5,6 @@ import {instance} from './instance';
 import useToast from '../hooks/useToast';
 
 
-
 interface AddUserParamsType {
   address?: string;
 }
@@ -184,6 +183,9 @@ export const useSetUserGpuId = () => {
 type getUserGpuIdResponse = {
   message: string;
   gpuId: string;
+  virtualGpu: number;
+  activatedAt: Date;
+  durationInSecond: number;
 };
 
 export const useGetUserGpuId = (params: {address: string}) => {
@@ -403,6 +405,27 @@ export const usePurchangeNuclear = () => {
 
   return useMutation({
     mutationFn: (params: PurchangeNuclearParamsType) => purchaseNuclear(params),
+    onSuccess: (data) => {
+      addToast('success', data.data.message);
+    },
+  });
+
+};
+
+
+// useActivateGpu
+interface ActivateGpuParamsType {
+  address?: string;
+}
+
+export const useActivateGpu = () => {
+  const {addToast} = useToast();
+
+  const activateGpu = (params: ActivateGpuParamsType) =>
+    instance.get('/setUserGpuActive', {params});
+
+  return useMutation({
+    mutationFn: (params: ActivateGpuParamsType) => activateGpu(params),
     onSuccess: (data) => {
       addToast('success', data.data.message);
     },
