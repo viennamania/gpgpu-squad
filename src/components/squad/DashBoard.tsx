@@ -111,6 +111,10 @@ const DashBoard = () => {
 
   const [squadName, setSquadName] = useState('');
   const [squadMemberCount, setSquadMemberCount] = useState(0);
+  const [squadMemberCountToday, setSquadMemberCountToday] = useState(0);
+  const [nuclear, setNuclear] = useState(0);
+  const [squadPoint, setSquadPoint] = useState(0);
+  const [squadRank, setSquadRank] = useState(0);
 
   console.log('squdName======', squadName);
   console.log('squadMemberCount======', squadMemberCount);
@@ -133,7 +137,15 @@ const DashBoard = () => {
 
         setSquadName(result?.data?.squadName);
 
-        setSquadMemberCount(result?.data?.memberCount);
+        setSquadMemberCount(result?.data?.memberCount || 0);
+
+        setSquadMemberCountToday(result?.data?.memberCountToday);
+
+        setNuclear(result?.data?.nuclear || 0);
+
+        setSquadPoint(result?.data?.squadPoint || 0);
+
+        setSquadRank(result?.data?.squadRank || 0);
 
       }
 
@@ -392,7 +404,9 @@ const DashBoard = () => {
                 Squad Point
               </p>
               <span className="text-[18px] font-medium leading-[25.2px] text-[#E5E5E5]">
-                10,563,356
+                {
+                  Number(squadPoint).toLocaleString()
+                }
               </span>
             </div>
             <div className="hidden h-[65px] w-[1px] bg-[#323233] lg:block"></div>
@@ -408,7 +422,7 @@ const DashBoard = () => {
                   }
                 </span>
                 <span className="rounded-[100px] bg-[#1D1E1F] px-2 py-1 text-[12px] font-medium leading-[15.6px] text-[#888E99]">
-                  today 12
+                  today {Number(squadMemberCountToday).toLocaleString()}
                 </span>
               </div>
             </div>
@@ -419,7 +433,9 @@ const DashBoard = () => {
               </p>
               <div className="flex items-center gap-1">
                 <span className="text-[18px] font-medium leading-[25.2px] text-[#E5E5E5]">
-                  13
+                  {
+                    Number(squadRank).toLocaleString()
+                  }
                 </span>
                 <div className="flex items-center">
                   <img src="/triangle.svg" />
@@ -445,7 +461,9 @@ const DashBoard = () => {
               </p>
               <div className="flex items-center gap-1">
                 <span className="text-[18px] font-medium leading-[25.2px] text-[#E5E5E5]">
-                  15
+                  {
+                    Number(nuclear).toLocaleString()
+                  }
                 </span>
                 {squad === 'leader' && (
                   <Dialog.Root>

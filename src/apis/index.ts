@@ -253,6 +253,10 @@ type getUserSquadResponse = {
   squadName: string;
   squad: string;
   memberCount: number;
+  memberCountToday: number;
+  nuclear: number;
+  squadPoint: number;
+  squadRank: number;
 };
 
 export const useGetUserSquad = (params: {address: string}) => {
