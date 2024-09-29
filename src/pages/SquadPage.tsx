@@ -61,7 +61,7 @@ const SquadPage = () => {
 
     address && fetch();
 
-  }, [address]);
+  }, [address, step]);
   
 
 
@@ -90,8 +90,12 @@ const SquadPage = () => {
 
 
   const [squadName, setSquadName] = useState('');
+  const [squadMemberCount, setSquadMemberCount] = useState(0);
+
 
   console.log('squdName======', squadName);
+  console.log('squadMemberCount===', squadMemberCount);
+
 
   const {refetch: getUserSquad, } = useGetUserSquad({address: address || ''});
   
@@ -111,6 +115,8 @@ const SquadPage = () => {
         setSquadName(result?.data?.squadName);
 
         setSquad(result?.data?.squad === 'leader' ? 'leader' : result?.data?.squad === 'member' ? 'member' : '');
+
+        setSquadMemberCount(result?.data?.memberCount || 0);
  
       } else {
         setSquadName('');
@@ -120,7 +126,7 @@ const SquadPage = () => {
 
     address && fetch();
 
-  }, [address]);
+  }, [address, step]);
 
 
 

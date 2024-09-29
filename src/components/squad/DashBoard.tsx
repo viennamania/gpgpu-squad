@@ -110,6 +110,10 @@ const DashBoard = () => {
 
 
   const [squadName, setSquadName] = useState('');
+  const [squadMemberCount, setSquadMemberCount] = useState(0);
+
+  console.log('squdName======', squadName);
+  console.log('squadMemberCount======', squadMemberCount);
 
   const {refetch: getUserSquad, } = useGetUserSquad({address: address || ''});
   
@@ -119,7 +123,7 @@ const DashBoard = () => {
     const fetch = async () => {
       const result = await getUserSquad();
 
-      console.log('getUserSquad result===', result);
+      console.log('getUserSquad result data===', result?.data);
 
       if (result?.data?.squadName) {
         
@@ -129,10 +133,10 @@ const DashBoard = () => {
 
         setSquadName(result?.data?.squadName);
 
+        setSquadMemberCount(result?.data?.memberCount);
+
       }
 
-
-      
 
       
     }
@@ -399,7 +403,9 @@ const DashBoard = () => {
               </p>
               <div className="flex items-center gap-1">
                 <span className="text-[18px] font-medium leading-[25.2px] text-[#E5E5E5]">
-                  10,345
+                  {
+                    Number(squadMemberCount).toLocaleString()
+                  }
                 </span>
                 <span className="rounded-[100px] bg-[#1D1E1F] px-2 py-1 text-[12px] font-medium leading-[15.6px] text-[#888E99]">
                   today 12
@@ -432,6 +438,7 @@ const DashBoard = () => {
               </div>
             </div>
             <div className="hidden h-[65px] w-[1px] bg-[#323233] lg:block"></div>
+
             <div className="flex flex-1 flex-col gap-1 py-2">
               <p className="text-[14px] font-normal leading-[19.6px] text-[#737780]">
                 Nuclear
@@ -452,6 +459,7 @@ const DashBoard = () => {
                 )}
               </div>
             </div>
+
           </div>
         </div>
 

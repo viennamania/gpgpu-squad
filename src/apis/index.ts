@@ -252,6 +252,7 @@ type getUserSquadResponse = {
   gpuId: string;
   squadName: string;
   squad: string;
+  memberCount: number;
 };
 
 export const useGetUserSquad = (params: {address: string}) => {
