@@ -336,3 +336,31 @@ export const useGetSquadList = () => {
     });
 
 }
+
+
+
+
+
+
+
+interface AttackSquadParamsType {
+  address?: string;
+  gpuId?: string; // coinboys
+  squadName?: string;
+  attackedSquadName?: string;
+}
+
+export const useAttackSquad = () => {
+  const {addToast} = useToast();
+
+  const attackSquad = (params: AttackSquadParamsType) =>
+    instance.get('/attackSquad', {params});
+
+  return useMutation({
+    mutationFn: (params: AttackSquadParamsType) => attackSquad(params),
+    onSuccess: (data) => {
+      addToast('success', data.data.message);
+    },
+  });
+
+};

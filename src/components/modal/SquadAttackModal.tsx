@@ -1,24 +1,156 @@
 import * as Dialog from '@radix-ui/react-dialog';
-import {useState} from 'react';
+
+import {useActiveAccount} from 'thirdweb/react';
+
+import {useEffect, useState} from 'react';
+
+import {
+  useGetUserGpuId,
+  useGetUserSquad,
+  useAttackSquad,
+} from '../../apis';
+
+
 
 const SquadAttackModal = () => {
+
+
+
   const [isAttacked, setIsAttacked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const victimSquad = 'airdropfinder';
 
-  const handleAttack = () => {
+
+  ///const victimSquad = 'airdropfinder';
+  const [victimSquad, setVictimSquad] = useState('');
+
+
+
+
+  const activeAccount = useActiveAccount();
+
+
+  const address = activeAccount?.address;
+
+
+
+  const [gpuId, setGpuId] = useState('');
+
+  const {refetch: getGpuId} = useGetUserGpuId({address: address || ''});
+  
+
+  useEffect(() => {
+    
+    const fetch = async () => {
+      const result = await getGpuId();
+
+      console.log('getGpuId result===', result);
+
+      if (result?.data?.gpuId) {
+        
+        ///setIsJoined(true);
+
+        setGpuId(result?.data?.gpuId);
+
+        
+
+      } else {
+        setGpuId('');
+      }
+
+    }
+
+    address && fetch();
+
+  }, [address]);
+
+  console.log('gpuId===', gpuId);
+
+
+  const [squad, setSquad] = useState('');
+
+  const [squadName, setSquadName] = useState('');
+
+  console.log('squdName======', squadName);
+
+  const {refetch: getUserSquad, } = useGetUserSquad({address: address || ''});
+  
+  useEffect(() => {
+
+    const fetch = async () => {
+      const result = await getUserSquad();
+
+      console.log('getUserSquad result===', result);
+
+      if (result?.data?.squadName) {
+
+        setSquadName(result?.data?.squadName);
+
+        setSquad(result?.data?.squad === 'leader' ? 'leader' : result?.data?.squad === 'member' ? 'member' : '');
+ 
+      } else {
+        setSquadName('');
+      }
+      
+    }
+
+    address && fetch();
+
+  }, [address]);
+
+
+  console.log('squadName===', squadName);
+  console.log('squad===', squad);
+
+
+
+  const {mutateAsync: attackSquadAsync} = useAttackSquad();
+
+  const attackSquad = async ()  => {
+
+    const result = await attackSquadAsync({
+      address: address || '',
+      gpuId: gpuId || '',
+      squadName: squadName || '',
+      attackedSquadName: '',
+    });
+
+    console.log('result', result);
+
+    return result;
+  };
+
+
+
+
+  const handleAttack = async () => {
     setIsLoading(true);
 
-    setTimeout(() => {
-      setIsLoading(false);
+    const result = await attackSquad();
+
+    console.log('attackSquad result.data', result?.data);
+
+    if (result) {
+      setVictimSquad(result?.data?.attackedSquadName);
+
       setIsAttacked(true);
-    }, 3000);
+    } else {
+      setIsAttacked(false);
+    }
+
+    setIsLoading(false);
   };
+
+  console.log('victimSquad===', victimSquad);
+
+
+
   return (
     <Dialog.Root>
       {!isAttacked ? (
         <Dialog.Trigger asChild>
-          <button className="h-10 rounded-[38px] bg-[#000000] py-[7px] pe-[20px] ps-[18px] text-[14px] leading-[22.4px] text-[#E5E5E5]">
+          <button
+            className="h-10 rounded-[38px] bg-[#000000] py-[7px] pe-[20px] ps-[18px] text-[14px] leading-[22.4px] text-[#E5E5E5]"
+          >
             ⚡️Attack Squad
           </button>
         </Dialog.Trigger>
@@ -139,7 +271,9 @@ const SquadAttackModal = () => {
                   Random Attack
                 </button>
               ))}
+
           </div>
+
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

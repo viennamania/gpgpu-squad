@@ -10,9 +10,6 @@ import {useActiveAccount} from 'thirdweb/react';
 
 import {useEffect, useState} from 'react';
 
-
-
-
 import {
   useGetUserGpuId,
   useGetUserSquad,
@@ -38,9 +35,7 @@ const SquadPage = () => {
 
   const {refetch: getGpuId, isLoading} = useGetUserGpuId({address: address || ''});
   
-
   console.log('isLoading===', isLoading);
-
 
   
   useEffect(() => {
