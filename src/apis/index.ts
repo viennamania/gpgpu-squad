@@ -155,6 +155,9 @@ export const useUserClaimedInfo = (): UseMutationResult<
 
 
 
+
+
+
 interface setUserGpuIdParamsType {
   address?: string;
   gpuId?: string; // coinboys
