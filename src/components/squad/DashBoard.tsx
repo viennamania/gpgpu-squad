@@ -139,7 +139,7 @@ const DashBoard = () => {
 
         setSquadMemberCount(result?.data?.memberCount || 0);
 
-        setSquadMemberCountToday(result?.data?.memberCountToday);
+        setSquadMemberCountToday(result?.data?.memberCountToday || 0);
 
         setNuclear(result?.data?.nuclear || 0);
 
@@ -155,6 +155,13 @@ const DashBoard = () => {
 
 
     address && fetch();
+
+    // fetch data every 5 seconds
+    const intervalId = setInterval(() => {
+      address && fetch();
+    }, 5000);
+
+    return () => clearInterval(intervalId);
 
 
   }, [address]);

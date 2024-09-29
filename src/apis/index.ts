@@ -369,3 +369,40 @@ export const useAttackSquad = () => {
   });
 
 };
+
+
+
+
+
+// usePurchangeNuclear
+/*
+      address,
+      gpuId,
+      squadName,
+      nuclear,
+      payment,
+      */
+
+interface PurchangeNuclearParamsType {
+  address?: string;
+  gpuId?: string; // coinboys
+  squadName?: string;
+  attackedSquadName?: string;
+  nuclear: number;
+  payment: number;
+}
+
+export const usePurchangeNuclear = () => {
+  const {addToast} = useToast();
+
+  const purchaseNuclear = (params: PurchangeNuclearParamsType) =>
+    instance.get('/purchaseNuclear', {params});
+
+  return useMutation({
+    mutationFn: (params: PurchangeNuclearParamsType) => purchaseNuclear(params),
+    onSuccess: (data) => {
+      addToast('success', data.data.message);
+    },
+  });
+
+};

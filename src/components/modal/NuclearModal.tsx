@@ -1,17 +1,202 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import MinusButton from '../MinusButton';
 import PlusButton from '../PlusButton';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+
+import {useActiveAccount} from 'thirdweb/react';
+
+
+import {
+  useGetUserGpuId,
+  useGetUserSquad,
+  usePurchangeNuclear,
+} from '../../apis';
+
+
+
+
+
+
 
 const NuclearModal = () => {
   const [countNumber, setCountNumber] = useState(0);
   const maxNum = 15;
+
+
+  const activeAccount = useActiveAccount();
+
+
+  const address = activeAccount?.address;
+
+
+
+  const [gpuId, setGpuId] = useState('');
+
+  const {refetch: getGpuId} = useGetUserGpuId({address: address || ''});
+  
+
+  useEffect(() => {
+    
+    const fetch = async () => {
+      const result = await getGpuId();
+
+      console.log('getGpuId result===', result);
+
+      if (result?.data?.gpuId) {
+        
+        ///setIsJoined(true);
+
+        setGpuId(result?.data?.gpuId);
+
+        
+
+      } else {
+        setGpuId('');
+      }
+
+    }
+
+    address && fetch();
+
+  }, [address]);
+
+  console.log('gpuId===', gpuId);
+
+
+  const [squad, setSquad] = useState('');
+
+  const [squadName, setSquadName] = useState('');
+
+  const [nuclear, setNuclear] = useState(0);
+  const [squadPoint, setSquadPoint] = useState(0);
+
+  console.log('squdName======', squadName);
+
+
+  const {refetch: getUserSquad, } = useGetUserSquad({address: address || ''});
+  
+  
+  useEffect(() => {
+
+    const fetch = async () => {
+      const result = await getUserSquad();
+
+      console.log('getUserSquad result===', result);
+
+      if (result?.data?.squadName) {
+
+        setSquadName(result?.data?.squadName);
+
+        setSquad(result?.data?.squad === 'leader' ? 'leader' : result?.data?.squad === 'member' ? 'member' : '');
+
+        setNuclear(result?.data?.nuclear || 0);
+        setSquadPoint(result?.data?.squadPoint || 0);
+ 
+      } else {
+        setSquadName('');
+        setNuclear(0);
+        setSquadPoint(0);
+      }
+      
+    }
+
+    address && fetch();
+
+  }, [address]);
+
+
+  console.log('squadName===', squadName);
+  console.log('squad===', squad);
+
+
+
+
+
+
+
+
 
   const handleChangeCount = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (Number(e.target.value) >= 1 && Number(e.target.value) <= maxNum) {
       setCountNumber(Number(e.target.value));
     }
   };
+
+
+
+  const {mutateAsync: purchaseNuclearAsync} = usePurchangeNuclear();
+
+  const purchaseNuclear = async ()  => {
+
+    const result = await purchaseNuclearAsync({
+      address: address || '',
+      gpuId: gpuId || '',
+      squadName: squadName || '',
+      nuclear: countNumber,
+      payment: countNumber * 100,
+    });
+
+    console.log('result', result);
+
+    return result;
+  };
+
+
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handlePurchaseNuclear = async () => {
+
+    setIsLoading(true);
+
+    const result = await purchaseNuclear();
+
+    console.log('purchaseNuclear result.data', result?.data);
+
+    if (result) {
+
+      setCountNumber(0);
+
+
+
+      const fetch = async () => {
+        const result = await getUserSquad();
+  
+        console.log('getUserSquad result===', result);
+  
+        if (result?.data?.squadName) {
+  
+          setSquadName(result?.data?.squadName);
+  
+          setSquad(result?.data?.squad === 'leader' ? 'leader' : result?.data?.squad === 'member' ? 'member' : '');
+  
+          setNuclear(result?.data?.nuclear || 0);
+          setSquadPoint(result?.data?.squadPoint || 0);
+   
+        } else {
+          setSquadName('');
+          setNuclear(0);
+          setSquadPoint(0);
+        }
+
+      }
+
+      address && fetch();
+
+
+
+
+   
+    } else {
+      
+    }
+
+    setIsLoading(false);
+  };
+
+
+
+
   return (
     <Dialog.Portal>
       <Dialog.Overlay className="dialogOverlayAnimation fixed inset-0 z-50 bg-[#00000080] backdrop-blur-md" />
@@ -57,7 +242,7 @@ const NuclearModal = () => {
                 possessive nuclear
               </span>
               <span className="text-[14px] font-normal leading-[22.4px] text-[#999EA7]">
-                ⚡️ 5
+                ⚡️ {nuclear}
               </span>
             </div>
             <div className="flex items-center justify-between">
@@ -65,7 +250,9 @@ const NuclearModal = () => {
                 Squad points
               </span>
               <span className="text-[14px] font-normal leading-[22.4px] text-[#999EA7]">
-                293,824,120
+                {
+                  Number(squadPoint).toLocaleString('en-US')
+                }
               </span>
             </div>
             <div className="flex items-center justify-between">
@@ -73,7 +260,9 @@ const NuclearModal = () => {
                 Points to be used
               </span>
               <span className="text-[14px] font-normal leading-[22.4px] text-[#E5E5E5]">
-                10,000
+                {
+                  Number(countNumber * 100).toLocaleString('en-US')
+                }
               </span>
             </div>
           </div>
@@ -85,14 +274,30 @@ const NuclearModal = () => {
               Total Coat
             </span>
             <span className="text-[14px] font-normal leading-[22.4px] text-[#E5E5E5]">
-              150,000
+              {
+                Number(squadPoint - countNumber * 100).toLocaleString('en-US')
+              }
             </span>
           </div>
 
           <Dialog.Close asChild>
-            <button className="h-12 w-full rounded-lg bg-white p-2.5 text-center text-[16px] font-medium leading-[24px] text-[#010101]">
-              Buy
-            </button>
+
+            {isLoading ? (
+              <button
+                className="h-12 w-full rounded-lg bg-[#4A4B4D] p-2.5 text-center text-[16px] font-medium leading-[24px] text-[#010101]"
+              >
+                Buying...
+              </button>
+            ) : (
+              <button
+                onClick={handlePurchaseNuclear}
+                className="h-12 w-full rounded-lg bg-white p-2.5 text-center text-[16px] font-medium leading-[24px] text-[#010101]"
+              >
+                Buy
+              </button>
+            )}
+
+
           </Dialog.Close>
         </div>
       </Dialog.Content>
