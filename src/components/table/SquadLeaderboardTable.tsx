@@ -40,53 +40,9 @@ const SquadLeaderboardTable = ({squadLeaderboardData}: SquadLeaderboardTableProp
   } , [squadLeaderboardData]);
 
 
-  console.log('tableData===', tableData);
+  //console.log('tableData===', tableData);
 
 
-  /*
-  const [tableData] = useState([
-    {
-      rank: 13,
-      name: 'Coinboys',
-      leader: 'coinboy',
-      member: 11241321,
-      totalPoint: 1822923000,
-      multiple: 2.5,
-    },
-    {
-      rank: 1,
-      name: 'Coinboys',
-      leader: 'coinboy',
-      member: 11241321,
-      totalPoint: 1822923000,
-      multiple: 2.5,
-    },
-    {
-      rank: 2,
-      name: 'Coinboys',
-      leader: 'coinboy',
-      member: 11241321,
-      totalPoint: 1822923000,
-      multiple: 2.5,
-    },
-    {
-      rank: 3,
-      name: 'Coinboys',
-      leader: 'coinboy',
-      member: 11241321,
-      totalPoint: 1822923000,
-      multiple: 2.5,
-    },
-    {
-      rank: 4,
-      name: 'Coinboys',
-      leader: 'coinboy',
-      member: 11241321,
-      totalPoint: 1822923000,
-      multiple: 2.5,
-    },
-  ]);
-  */
 
   const columns = [
     {
@@ -163,7 +119,7 @@ const SquadLeaderboardTable = ({squadLeaderboardData}: SquadLeaderboardTableProp
       header: 'Name',
       cell: (props: CellContext<TableData, string>) => {
         return (
-          <div className="px-[21.5px] py-4 text-left lg:min-w-[52px]">
+          <div className="px-[21.5px] py-4 text-left lg:min-w-[152px] min-w-[152px]">
             <p className={props.row.index === 0 ? 'text-white' : ''}>
               {props.getValue()}
             </p>

@@ -389,9 +389,9 @@ const DashBoard = () => {
       if (result?.data?.data) {
   
 
-        const squadLeaderboard = result?.data?.data.map((item: any) => {
+        const squadLeaderboard = result?.data?.data.map((item: any, index: number) => {
           return {
-            rank: 1,
+            rank: index + 1,
             name: item?.squadName,
             leader: item?.gpuId,
             member: item?.memberCount || 0,
@@ -404,7 +404,6 @@ const DashBoard = () => {
         //setSquadLeaderboardData(squadLeaderboard);
 
         // first is my squad
-        // exclude my squad
         setSquadLeaderboardData([
           {
             rank: 1,
@@ -415,7 +414,7 @@ const DashBoard = () => {
             multiple: 2.5,
           },
           
-          ...squadLeaderboard.filter((item: any) => item.name !== squadName),
+          ...squadLeaderboard,
         ]);
 
 
@@ -426,7 +425,7 @@ const DashBoard = () => {
 
     fetch();
 
-  }, []);
+  }, [squadName, gpuId, squadMemberCount, squadPoint]);
 
 
   //console.log('squadLeaderboardData===', squadLeaderboardData);
