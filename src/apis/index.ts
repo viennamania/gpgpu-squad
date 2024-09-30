@@ -350,6 +350,36 @@ export const useGetSquadList = () => {
 
 
 
+// useGetSquadLeaderboard
+
+type getSquadLeaderboardResponse = {
+  message: string;
+  data: any[];
+};
+
+export const useGetSquadLeaderboard = () => {
+  
+    const getSquadLeaderboard = async () => {
+
+      const response = await instance.get<getSquadLeaderboardResponse>('/getSquadLeaderboard');
+  
+      //console.log('useGetSquadLeaderboard response.data', response.data);
+  
+      return response.data;
+    };
+
+    return useQuery<getSquadLeaderboardResponse, Error>({
+      queryKey: ['getSquadLeaderboard'],
+      queryFn: () => getSquadLeaderboard(),
+      select: (data) => data,
+      enabled: false,
+      retry: 0,
+    });
+
+}
+
+
+
 
 
 

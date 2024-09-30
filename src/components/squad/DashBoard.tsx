@@ -17,7 +17,9 @@ import {
   useGetUserGpuId,
   useGetUserSquad,
   useActivateGpu,
+  useGetSquadLeaderboard,
 } from '../../apis';
+
 
 
 
@@ -274,8 +276,160 @@ const DashBoard = () => {
 
 
 
+  /*
+  const squadLeaderboardData = [
+    {
+      rank: 13,
+      name: 'Coinboys',
+      leader: 'coinboy',
+      member: 11241321,
+      totalPoint: 1822923000,
+      multiple: 2.5,
+    },
+    {
+      rank: 1,
+      name: 'Coinboys',
+      leader: 'coinboy',
+      member: 11241321,
+      totalPoint: 1822923000,
+      multiple: 2.5,
+    },
+    {
+      rank: 2,
+      name: 'Coinboys',
+      leader: 'coinboy',
+      member: 11241321,
+      totalPoint: 1822923000,
+      multiple: 2.5,
+    },
+    {
+      rank: 3,
+      name: 'Coinboys',
+      leader: 'coinboy',
+      member: 11241321,
+      totalPoint: 1822923000,
+      multiple: 2.5,
+    },
+    {
+      rank: 4,
+      name: 'Coinboys',
+      leader: 'coinboy',
+      member: 11241321,
+      totalPoint: 1822923000,
+      multiple: 2.5,
+    },
+  ];
+  */
 
 
+  interface SquadLeaderboardItem {
+    rank: number;
+    name: string;
+    leader: string;
+    member: number;
+    totalPoint: number;
+    multiple: number;
+  }
+  
+  const [squadLeaderboardData, setSquadLeaderboardData] = useState<SquadLeaderboardItem[]>([
+
+    /*
+    {
+      rank: 13,
+      name: 'Coinboys',
+      leader: 'coinboy',
+      member: 11241321,
+      totalPoint: 1822923000,
+      multiple: 2.5,
+    },
+    {
+      rank: 1,
+      name: 'Coinboys',
+      leader: 'coinboy',
+      member: 11241321,
+      totalPoint: 1822923000,
+      multiple: 2.5,
+    },
+    {
+      rank: 2,
+      name: 'Coinboys',
+      leader: 'coinboy',
+      member: 11241321,
+      totalPoint: 1822923000,
+      multiple: 2.5,
+    },
+    {
+      rank: 3,
+      name: 'Coinboys',
+      leader: 'coinboy',
+      member: 11241321,
+      totalPoint: 1822923000,
+      multiple: 2.5,
+    },
+    {
+      rank: 4,
+      name: 'Coinboys',
+      leader: 'coinboy',
+      member: 11241321,
+      totalPoint: 1822923000,
+      multiple: 2.5,
+    },
+    */
+  ]);
+
+  const {refetch: getSquadLeaderboard} = useGetSquadLeaderboard();
+
+  useEffect(() => {
+    
+    const fetch = async () => {
+      const result = await getSquadLeaderboard();
+
+      //console.log('getSquadLeaderboard result===', result);
+
+      if (result?.data?.data) {
+  
+
+        const squadLeaderboard = result?.data?.data.map((item: any) => {
+          return {
+            rank: 1,
+            name: item?.squadName,
+            leader: item?.gpuId,
+            member: item?.memberCount || 0,
+            totalPoint: item?.squadPoint || 0,
+            multiple: item?.multiple || 0,
+          };
+        } );
+          
+          
+        //setSquadLeaderboardData(squadLeaderboard);
+
+        // first is my squad
+        // exclude my squad
+        setSquadLeaderboardData([
+          {
+            rank: 1,
+            name: squadName,
+            leader: gpuId,
+            member: squadMemberCount,
+            totalPoint: squadPoint,
+            multiple: 2.5,
+          },
+          
+          ...squadLeaderboard.filter((item: any) => item.name !== squadName),
+        ]);
+
+
+
+      }
+      
+    }
+
+    fetch();
+
+  }, []);
+
+
+  //console.log('squadLeaderboardData===', squadLeaderboardData);
 
 
   return (
@@ -645,12 +799,18 @@ const DashBoard = () => {
         </div>
 
         <SquadHistoryTable />
+
       </div>
 
       {/* tables */}
       <div className="mb-[46px] mt-8 flex flex-col gap-2 lg:mb-[185px] lg:flex-row lg:gap-4">
-        <SquadLeaderboardTable />
+        
+        <SquadLeaderboardTable
+          squadLeaderboardData={squadLeaderboardData}
+        />
+
         <PersonalLeaderboardTable />
+
       </div>
     </div>
   );

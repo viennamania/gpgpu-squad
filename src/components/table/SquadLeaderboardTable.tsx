@@ -5,7 +5,7 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import Pagination from './Pagination';
 
 type TableData = {
@@ -17,8 +17,33 @@ type TableData = {
   multiple: number;
 };
 
-const SquadLeaderboardTable = () => {
+
+
+interface SquadLeaderboardTablePropsType {
+  squadLeaderboardData: TableData[];
+}
+
+const SquadLeaderboardTable = ({squadLeaderboardData}: SquadLeaderboardTablePropsType) => {
+
   const [currentPage, setCurrentPage] = useState(1);
+
+
+  console.log('squadLeaderboardData===', squadLeaderboardData);
+  
+
+  ///const [tableData] = useState(squadLeaderboardData);
+
+  const [tableData, setTableData] = useState([] as TableData[]);
+
+  useEffect(() => {
+    setTableData(squadLeaderboardData);
+  } , [squadLeaderboardData]);
+
+
+  console.log('tableData===', tableData);
+
+
+  /*
   const [tableData] = useState([
     {
       rank: 13,
@@ -61,6 +86,7 @@ const SquadLeaderboardTable = () => {
       multiple: 2.5,
     },
   ]);
+  */
 
   const columns = [
     {
@@ -163,7 +189,9 @@ const SquadLeaderboardTable = () => {
         return (
           <div className="w-[92px] px-[21.5px] py-4 text-left lg:min-w-[140px]">
             <p className={props.row.index === 0 ? 'text-white' : ''}>
-              {props.getValue().toLocaleString()}
+              {
+                props.getValue().toLocaleString()
+              }
             </p>
           </div>
         );
