@@ -488,6 +488,12 @@ const DashBoard = () => {
       }
   
       fetch();
+
+      const intervalId = setInterval(() => {
+        fetch();
+      } , 5000);
+
+      return () => clearInterval(intervalId);
   
     }, [squadName, squadPoint]);
 
