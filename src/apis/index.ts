@@ -395,7 +395,7 @@ export const useGetPersonalLeaderboard = () => {
 
       const response = await instance.get<PersonalLeaderboardResponse>('/getPersonalLeaderboard');
   
-      //console.log('useGetPersonalLeaderboard response.data', response.data);
+      ////console.log('useGetPersonalLeaderboard response.data', response.data);
   
       return response.data;
     };

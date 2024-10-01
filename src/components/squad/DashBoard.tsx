@@ -29,40 +29,6 @@ import {
 
 
 
-const items = [
-  {
-    type: 'Attacker',
-    typeCount: 13,
-    name: 'coinboys',
-    target: 'Victim',
-    targetCount: 4,
-    targetName: 'airdopfinder',
-    points: '-300,000,000 Point',
-    timeAgo: '3m ago',
-  },
-  {
-    type: 'Attacker2',
-    typeCount: 13,
-    name: 'coinboys2',
-    target: 'Victim2',
-    targetCount: 4,
-    targetName: 'airdopfinder2',
-    points: '-300,000,000 Point2',
-    timeAgo: '3m ago',
-  },
-  {
-    type: 'Attacker3',
-    typeCount: 13,
-    name: 'coinboys3',
-    target: 'Victim3',
-    targetCount: 4,
-    targetName: 'airdopfinder3',
-    points: '-300,000,000 Point3',
-    timeAgo: '3m ago',
-  },
-];
-
-
 const DashBoard = () => {
 
   const {addToast} = useToast();
@@ -497,7 +463,7 @@ const DashBoard = () => {
           } else {
             setPersonalLeaderboardData(personalLeaderboard);
           }
-          
+
   
         }
         
@@ -514,6 +480,9 @@ const DashBoard = () => {
     }, [userSquadPoint, squadRank, gpuId]);
 
 
+
+
+  const [gameHistory, setGameHistory] = useState([] as any);
 
 
 
@@ -533,9 +502,11 @@ const DashBoard = () => {
     const fetch = async () => {
       const result = await getGameHistoryList();
 
-      console.log('getGameHistoryList result===', result);
+      ////console.log('getGameHistoryList result===', result);
 
       if (result?.data?.data) {
+
+        setGameHistory(result?.data?.data);
         
         const squadHistory = result?.data?.data.map((item: any) => {
 
@@ -632,6 +603,102 @@ const DashBoard = () => {
 
 
 
+/*
+const items = [
+  {
+    type: 'Attacker',
+    typeCount: 13,
+    name: 'coinboys',
+    target: 'Victim',
+    targetCount: 4,
+    targetName: 'airdopfinder',
+    points: '-300,000,000 Point',
+    timeAgo: '3m ago',
+  },
+  {
+    type: 'Attacker2',
+    typeCount: 13,
+    name: 'coinboys2',
+    target: 'Victim2',
+    targetCount: 4,
+    targetName: 'airdopfinder2',
+    points: '-300,000,000 Point2',
+    timeAgo: '3m ago',
+  },
+  {
+    type: 'Attacker3',
+    typeCount: 13,
+    name: 'coinboys3',
+    target: 'Victim3',
+    targetCount: 4,
+    targetName: 'airdopfinder3',
+    points: '-300,000,000 Point3',
+    timeAgo: '3m ago',
+  },
+];
+*/
+
+  interface SquadAttackHistoryItem {
+    type: string;
+    typeCount: number;
+    name: string;
+    target: string;
+    targetCount: number;
+    targetName: string;
+    points: string;
+    timeAgo: string;
+  }
+
+  const [items, setItems] = useState([] as SquadAttackHistoryItem[]);
+
+
+  useEffect(() => {
+
+    let itemsData = [] as SquadAttackHistoryItem[];
+
+    // gameHistory is which is action is 'attackSquad' and sort by createdAt desc
+
+    gameHistory.map((item: any) => {
+
+      let i = 0;
+
+      if (item?.action === 'attackSquad') {
+
+        //timeAgo is form now to createdAt
+        const timeAgo = (new Date().getTime() - new Date(item?.createdAt).getTime()) / 1000 + 's ago';
+
+        console.log('timeAgo===', timeAgo);
+
+
+
+        itemsData.push({
+          type: i === 0 ? 'Attacker' : i === 1 ? 'Attacker2' : 'Attacker3',
+          typeCount: 13,
+          name: item?.squadName,
+          target: 'Victim',
+          targetCount: 4,
+          targetName: 'airdopfinder',
+          points: '-300,000,000 Point',
+          
+          timeAgo: timeAgo,
+        });
+
+        i++;
+
+      }
+
+    });
+
+    setItems(itemsData);
+
+  } , [squadHistoryData]);
+
+
+
+
+
+
+
 
   return (
     <div className="w-full">
@@ -656,6 +723,7 @@ const DashBoard = () => {
           style={{
             transform: `translateY(-${currentIndex * 100}%)`,
           }}>
+
           {items.map((item, index) => (
             <div
               key={index}
@@ -707,7 +775,9 @@ const DashBoard = () => {
               </div>
             </div>
           ))}
+
           {/* 페이크 아이템 추가 */}
+          {/*
           <div className="hidden min-h-[49px] w-full items-center gap-4 lg:flex">
             <div className="flex flex-1 items-center gap-2">
               <span className="text-[14px] leading-[22.4px] text-[#E5E5E5]">
@@ -754,6 +824,9 @@ const DashBoard = () => {
               </span>
             </div>
           </div>
+          */}
+
+
         </div>
       </div>
 
@@ -789,6 +862,9 @@ const DashBoard = () => {
               </div>
             </div>
           ))}
+
+          {/* 페이크 아이템 추가 */}
+          {/*
           <div className="flex min-h-[49px] w-full items-center justify-between gap-2 lg:hidden">
             <div className="flex flex-1 items-center gap-2">
               <span className="text-[14px] leading-[22.4px] text-[#E5E5E5]">
@@ -811,6 +887,8 @@ const DashBoard = () => {
               </span>
             </div>
           </div>
+          */}
+
         </div>
       </div>
 
