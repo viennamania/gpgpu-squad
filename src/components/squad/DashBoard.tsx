@@ -99,7 +99,7 @@ const DashBoard = () => {
     const fetch = async () => {
       const result = await getGpuId();
 
-      //console.log('getGpuId result===', result);
+      console.log('getGpuId result===', result);
 
       if (result?.data?.gpuId) {
         
@@ -485,14 +485,19 @@ const DashBoard = () => {
   
           //console.log('personalLeaderboard===', personalLeaderboard);
   
-          setPersonalLeaderboardData([
-            {
-              rank: squadRank,
-              name: gpuId,
-              totalPoint: userSquadPoint
-            },
-            ...personalLeaderboard,
-          ])
+          if (squad === 'member') {
+            setPersonalLeaderboardData([
+              {
+                rank: squadRank,
+                name: gpuId,
+                totalPoint: userSquadPoint
+              },
+              ...personalLeaderboard,
+            ])
+          } else {
+            setPersonalLeaderboardData(personalLeaderboard);
+          }
+          
   
         }
         
