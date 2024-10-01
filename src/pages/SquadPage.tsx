@@ -43,7 +43,7 @@ const SquadPage = () => {
     const fetch = async () => {
       const result = await getGpuId();
 
-      console.log('getGpuId result===', result);
+      //console.log('getGpuId result===', result);
 
       if (result?.data?.gpuId) {
         
@@ -93,7 +93,7 @@ const SquadPage = () => {
   const [squadMemberCount, setSquadMemberCount] = useState(0);
 
 
-  console.log('squdName======', squadName);
+  //console.log('squdName======', squadName);
   console.log('squadMemberCount===', squadMemberCount);
 
 
@@ -104,7 +104,7 @@ const SquadPage = () => {
     const fetch = async () => {
       const result = await getUserSquad();
 
-      console.log('getUserSquad result===', result);
+      //console.log('getUserSquad result===', result);
 
       if (result?.data?.squadName) {
         

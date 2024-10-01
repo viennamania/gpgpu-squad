@@ -81,7 +81,7 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
 
   const [squadName, setSquadName] = useState('');
 
-  console.log('squdName======', squadName);
+  //console.log('squdName======', squadName);
 
   const {refetch: getUserSquad, } = useGetUserSquad({address: address || ''});
   
@@ -90,7 +90,7 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
     const fetch = async () => {
       const result = await getUserSquad();
 
-      console.log('getUserSquad result===', result);
+      ///console.log('getUserSquad result===', result);
 
       if (result?.data?.squadName) {
         

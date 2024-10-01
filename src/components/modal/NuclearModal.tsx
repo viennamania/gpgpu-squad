@@ -40,7 +40,7 @@ const NuclearModal = () => {
     const fetch = async () => {
       const result = await getGpuId();
 
-      console.log('getGpuId result===', result);
+      //console.log('getGpuId result===', result);
 
       if (result?.data?.gpuId) {
         
@@ -70,7 +70,7 @@ const NuclearModal = () => {
   const [nuclear, setNuclear] = useState(0);
   const [squadPoint, setSquadPoint] = useState(0);
 
-  console.log('squdName======', squadName);
+  //console.log('squdName======', squadName);
 
 
   const {refetch: getUserSquad, } = useGetUserSquad({address: address || ''});
@@ -81,7 +81,7 @@ const NuclearModal = () => {
     const fetch = async () => {
       const result = await getUserSquad();
 
-      console.log('getUserSquad result===', result);
+      ///console.log('getUserSquad result===', result);
 
       if (result?.data?.squadName) {
 
@@ -162,7 +162,7 @@ const NuclearModal = () => {
       const fetch = async () => {
         const result = await getUserSquad();
   
-        console.log('getUserSquad result===', result);
+        ///console.log('getUserSquad result===', result);
   
         if (result?.data?.squadName) {
   

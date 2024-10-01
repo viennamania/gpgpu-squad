@@ -33,7 +33,15 @@ type TableData = {
   date: Date;
 };
 
-const SquadHistoryTable = () => {
+
+interface SquadHistoryTablePropsType {
+  squadHistoryData: TableData[];
+}
+
+
+
+const SquadHistoryTable = ({squadHistoryData}: SquadHistoryTablePropsType) => {
+
   const [stateType, setStateType] = useState('All');
   const [isShowDropdown, setIsShowDropdown] = useState(false);
   const squad = useRecoilValue(squadState);
@@ -59,7 +67,7 @@ const SquadHistoryTable = () => {
     const fetch = async () => {
       const result = await getGpuId();
 
-      console.log('getGpuId result===', result);
+      //console.log('getGpuId result===', result);
 
       if (result?.data?.gpuId) {
         
@@ -93,7 +101,7 @@ const SquadHistoryTable = () => {
     const fetch = async () => {
       const result = await getUserSquad();
 
-      console.log('getUserSquad result===', result);
+      ///console.log('getUserSquad result===', result);
 
       if (result?.data?.squadName) {
         
@@ -124,6 +132,17 @@ const SquadHistoryTable = () => {
     setStateType(type);
   };
 
+
+
+
+  const [tableData, setTableData] = useState([] as TableData[]);
+
+  useEffect(() => {
+    setTableData(squadHistoryData);
+  } , [squadHistoryData]);
+
+
+  /*
   const [tableData] = useState([
     {
       state: 'Attack',
@@ -156,13 +175,16 @@ const SquadHistoryTable = () => {
       date: new Date(),
     },
   ]);
+  */
+
+
   const columns = [
     {
       accessorKey: 'state',
       header: 'State',
       cell: (props: CellContext<TableData, string>) => {
         return (
-          <div className="flex h-[42px] w-[100px] items-center px-6 text-left text-[12px] leading-[14.4px] text-[#E5E5E5]">
+          <div className="flex h-[42px] w-[60px] items-center px-6 text-left text-[12px] leading-[14.4px] text-[#E5E5E5]">
             <p>{props.getValue()}</p>
           </div>
         );
@@ -172,7 +194,7 @@ const SquadHistoryTable = () => {
       accessorKey: 'squad',
       header: 'Sqaud',
       cell: (props: CellContext<TableData, string>) => (
-        <div className="flex h-[42px] w-[128px] items-center px-5 text-right text-[12px] leading-[14.4px]">
+        <div className="flex h-[42px] w-[168px] items-center px-5 text-right text-[12px] leading-[14.4px]">
           <p>{props.getValue()}</p>
         </div>
       ),
@@ -182,7 +204,14 @@ const SquadHistoryTable = () => {
       header: 'Content',
       cell: (props: CellContext<TableData, string>) => (
         <div className="flex h-[42px] min-w-[400px] items-center px-4 text-left text-[12px] leading-[14.4px] lg:min-w-full">
-          {(props.row.original.state === 'Attack' ||
+          
+          
+            {/*props.getValue() is html string*/}
+
+            <div dangerouslySetInnerHTML={{__html: props.getValue()}}></div>
+          
+
+          {/*(props.row.original.state === 'Attack' ||
             props.row.original.state === 'Damage') && (
             <p>
               nuclear misiile drop{' '}
@@ -201,7 +230,7 @@ const SquadHistoryTable = () => {
               <span className="text-white">{props.getValue()}</span> has joined
               us
             </p>
-          )}
+          )*/}
         </div>
       ),
     },
@@ -209,7 +238,10 @@ const SquadHistoryTable = () => {
       accessorKey: 'date',
       header: 'Date',
       cell: (props: CellContext<TableData, Date>) => {
+        
         const date = props.getValue();
+
+        //console.log('date====', date);
 
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1 필요
@@ -219,6 +251,9 @@ const SquadHistoryTable = () => {
         const minutes = String(date.getMinutes()).padStart(2, '0');
 
         const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;
+        
+
+        //const formattedDate = props.getValue().toLocaleString();
 
         return (
           <div className="flex h-[42px] w-auto items-center justify-end px-5 text-right text-[12px] leading-[14.4px]">

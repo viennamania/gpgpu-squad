@@ -28,7 +28,7 @@ const SquadLeaderboardTable = ({squadLeaderboardData}: SquadLeaderboardTableProp
   const [currentPage, setCurrentPage] = useState(1);
 
 
-  console.log('squadLeaderboardData===', squadLeaderboardData);
+  //console.log('squadLeaderboardData===', squadLeaderboardData);
   
 
   ///const [tableData] = useState(squadLeaderboardData);

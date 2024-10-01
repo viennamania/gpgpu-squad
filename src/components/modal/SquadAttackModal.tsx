@@ -43,7 +43,7 @@ const SquadAttackModal = () => {
     const fetch = async () => {
       const result = await getGpuId();
 
-      console.log('getGpuId result===', result);
+      //console.log('getGpuId result===', result);
 
       if (result?.data?.gpuId) {
         
@@ -70,7 +70,7 @@ const SquadAttackModal = () => {
 
   const [squadName, setSquadName] = useState('');
 
-  console.log('squdName======', squadName);
+  //console.log('squdName======', squadName);
 
   const {refetch: getUserSquad, } = useGetUserSquad({address: address || ''});
   
@@ -79,7 +79,7 @@ const SquadAttackModal = () => {
     const fetch = async () => {
       const result = await getUserSquad();
 
-      console.log('getUserSquad result===', result);
+      ///console.log('getUserSquad result===', result);
 
       if (result?.data?.squadName) {
 

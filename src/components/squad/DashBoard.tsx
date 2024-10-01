@@ -17,7 +17,12 @@ import {
   useGetUserGpuId,
   useGetUserSquad,
   useActivateGpu,
+
   useGetSquadLeaderboard,
+  
+  useGetPersonalLeaderboard,
+
+  useGetGameHistoryList,
 } from '../../apis';
 
 
@@ -92,7 +97,7 @@ const DashBoard = () => {
     const fetch = async () => {
       const result = await getGpuId();
 
-      console.log('getGpuId result===', result);
+      //console.log('getGpuId result===', result);
 
       if (result?.data?.gpuId) {
         
@@ -146,8 +151,8 @@ const DashBoard = () => {
   const [squadPoint, setSquadPoint] = useState(0);
   const [squadRank, setSquadRank] = useState(0);
 
-  console.log('squdName======', squadName);
-  console.log('squadMemberCount======', squadMemberCount);
+  //console.log('squdName======', squadName);
+  //console.log('squadMemberCount======', squadMemberCount);
 
   const {refetch: getUserSquad, } = useGetUserSquad({address: address || ''});
   
@@ -394,14 +399,14 @@ const DashBoard = () => {
             rank: index + 1,
             name: item?.squadName,
             leader: item?.gpuId,
-            member: item?.memberCount || 0,
+            member: item?.joinedMemberCount || 0,
             totalPoint: item?.squadPoint || 0,
             multiple: item?.multiple || 0,
           };
         } );
           
           
-        //setSquadLeaderboardData(squadLeaderboard);
+        //console.log('squadLeaderboard===', squadLeaderboard);
 
         // first is my squad
         setSquadLeaderboardData([
@@ -428,7 +433,222 @@ const DashBoard = () => {
   }, [squadName, gpuId, squadMemberCount, squadPoint]);
 
 
-  //console.log('squadLeaderboardData===', squadLeaderboardData);
+
+
+
+  interface PersonalLeaderboardItem {
+    rank: number;
+    name: string;
+    totalPoint: number;
+  }
+ 
+
+  /*
+      {
+      rank: 8293,
+      name: 'Coinboys',
+      totalPoint: 1822923000,
+    },
+  */
+
+  const [personalLeaderboardData, setPersonalLeaderboardData] = useState([] as PersonalLeaderboardItem[]);
+
+  const {refetch: getPersonalLeaderboard} = useGetPersonalLeaderboard();
+
+  useEffect(() => {
+      
+      const fetch = async () => {
+        const result = await getPersonalLeaderboard();
+  
+        //console.log('getPersonalLeaderboard result===', result);
+  
+        if (result?.data?.data) {
+          
+          const personalLeaderboard = result?.data?.data.map((item: any, index: number) => {
+            return {
+              rank: index + 1,
+              name: item?.gpuId,
+              totalPoint: item?.squadPoint || 0,
+            };
+          });
+  
+          //console.log('personalLeaderboard===', personalLeaderboard);
+  
+          setPersonalLeaderboardData([
+            {
+              rank: squadRank,
+              name: gpuId,
+              totalPoint: squadPoint,
+            },
+            ...personalLeaderboard,
+          ])
+  
+        }
+        
+      }
+  
+      fetch();
+  
+    }, [squadName, squadPoint]);
+
+
+
+
+
+  interface SquadHistoryItem {
+    state: string;
+    squad: string;
+    content: string;
+    date: Date;
+  }
+
+  const [squadHistoryData, setSquadHistoryData] = useState([] as SquadHistoryItem[]);
+
+  const {refetch: getGameHistoryList} = useGetGameHistoryList();
+
+  useEffect(() => {
+    
+    const fetch = async () => {
+      const result = await getGameHistoryList();
+
+      console.log('getGameHistoryList result===', result);
+
+      if (result?.data?.data) {
+        
+        const squadHistory = result?.data?.data.map((item: any) => {
+
+          /*
+          {
+            "_id": "66fb75032e1b3c437d3e07ad",
+            "createdAt": "2024-10-01T04:05:23.178Z",
+            "walletAddress": "0x766965F3f902215C96477b46c3e3d540436A7d64",
+            "gpuId": "hqqggaa",
+            "squadName": "songpa",
+            "action": "joinSquad"
+        }
+          */
+
+          let state = '';
+          if (item?.action === 'joinSquad') {
+            state = 'Join';
+          } else if (item?.action === 'purchaseNuclear') {
+            state = 'Purchase';
+          } else if (item?.action === 'attackSquad') {
+            state = 'Attack';
+          } else if (item?.action === 'damageSquad') {
+            state = 'Damage';
+          }
+
+
+          // content is html
+          let content = '';
+
+
+          {/*(props.row.original.state === 'Attack' ||
+            props.row.original.state === 'Damage') && (
+            <p>
+              nuclear misiile drop{' '}
+              <span className="text-white">({props.getValue()})</span>
+            </p>
+          )}
+          {props.row.original.state === 'Purchase' && (
+            <p>
+              Leader's bought two nuclear missiles{' '}
+              <span className="text-white">({props.getValue()})</span>
+            </p>
+          )}
+          {props.row.original.state === 'Join' && (
+            <p>
+              The new user,{' '}
+              <span className="text-white">{props.getValue()}</span> has joined
+              us
+            </p>
+          )*/}
+
+
+          if (state === 'Attack' || state === 'Damage') {
+            content = `nuclear misiile drop <span className="text-white">(${item?.nuclear})</span>`;
+          } else if (state === 'Purchase') {
+            content = `Leader's bought two nuclear missiles <span className="text-white">(${item?.nuclear})</span>`;
+          } else if (state === 'Join') {
+            content = `The new user, <span className="text-white">${item?.squadName}</span> has joined us`;
+          } else {
+            content = '';
+          }
+
+
+
+          return {
+            state: state,
+            squad: item?.squadName,
+            content: content,
+            date: new Date(item?.createdAt),
+          };
+        });
+
+        //console.log('squadHistory===', squadHistory);
+
+        setSquadHistoryData(squadHistory);
+
+     
+
+      }
+      
+    }
+
+    fetch();
+
+    // fetch data every 5 seconds
+    const intervalId = setInterval(() => {
+      fetch();
+    }, 5000);
+
+    return () => clearInterval(intervalId);
+
+  }, []);
+
+
+
+
+  /*
+  [
+    {
+      state: 'Attack',
+      squad: 'Coingraph',
+      content: '-300,000 points',
+      date: new Date(),
+    },
+    {
+      state: 'Damage',
+      squad: 'Coingraph',
+      content: '-80,000 points',
+      date: new Date(),
+    },
+    {
+      state: 'Purchase',
+      squad: '-',
+      content: '-80,000 points',
+      date: new Date(),
+    },
+    {
+      state: 'Join',
+      squad: '-',
+      content: 'Orange',
+      date: new Date(),
+    },
+    {
+      state: 'Join',
+      squad: '-',
+      content: 'Orange',
+      date: new Date(),
+    },
+  ]
+    */
+
+
+
+
+
 
 
   return (
@@ -784,8 +1004,9 @@ const DashBoard = () => {
               </button>
             ) : (
               <button
-                disabled={gpuGage !== 43}
-                className={`rounded-[100px] px-6 py-2.5 text-[16px] font-medium leading-[20.8px] ${gpuGage !== 43 ? 'border border-[#4A4B4D] bg-transparent text-[#999EA7]' : 'bg-white text-[#010101]'}`}
+                disabled={gpuGage !== 43 || squad === 'leader'}
+                className={`rounded-[100px] px-6 py-2.5 text-[16px] font-medium leading-[20.8px]
+                  ${ (gpuGage !== 43 || squad === 'leader') ? 'border border-[#4A4B4D] bg-transparent text-[#999EA7]' : 'bg-white text-[#010101]'}`}
                 onClick={handleActivateGpu}
               >
                 
@@ -797,7 +1018,9 @@ const DashBoard = () => {
           </div>
         </div>
 
-        <SquadHistoryTable />
+        <SquadHistoryTable
+          squadHistoryData={squadHistoryData}
+        />
 
       </div>
 
@@ -808,7 +1031,9 @@ const DashBoard = () => {
           squadLeaderboardData={squadLeaderboardData}
         />
 
-        <PersonalLeaderboardTable />
+        <PersonalLeaderboardTable
+          personalLeaderboardData={personalLeaderboardData}
+        />
 
       </div>
     </div>

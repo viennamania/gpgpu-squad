@@ -5,8 +5,10 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import Pagination from './Pagination';
+
+
 
 type TableData = {
   rank: number;
@@ -14,35 +16,25 @@ type TableData = {
   totalPoint: number;
 };
 
-const PersonalLeaderboardTable = () => {
+
+
+interface PersonalLeaderboardTablePropsType {
+  personalLeaderboardData: TableData[];
+}
+
+const PersonalLeaderboardTable = ({ personalLeaderboardData }: PersonalLeaderboardTablePropsType) => {
+
   const [currentPage, setCurrentPage] = useState(1);
-  const [tableData] = useState([
-    {
-      rank: 8293,
-      name: 'Coinboys',
-      totalPoint: 1822923000,
-    },
-    {
-      rank: 1,
-      name: 'Coinboys',
-      totalPoint: 1822923000,
-    },
-    {
-      rank: 2,
-      name: 'Coinboys',
-      totalPoint: 1822923000,
-    },
-    {
-      rank: 3,
-      name: 'Coinboys',
-      totalPoint: 1822923000,
-    },
-    {
-      rank: 4,
-      name: 'Coinboys',
-      totalPoint: 1822923000,
-    },
-  ]);
+
+  const [tableData, setTableData] = useState([] as TableData[]);
+
+ 
+  useEffect(() => {
+    setTableData(personalLeaderboardData);
+  }, [personalLeaderboardData]);
+
+
+
 
   const columns = [
     {

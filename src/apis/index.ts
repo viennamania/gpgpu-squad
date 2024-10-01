@@ -352,7 +352,7 @@ export const useGetSquadList = () => {
 
 // useGetSquadLeaderboard
 
-type getSquadLeaderboardResponse = {
+type SquadLeaderboardResponse = {
   message: string;
   data: any[];
 };
@@ -361,14 +361,14 @@ export const useGetSquadLeaderboard = () => {
   
     const getSquadLeaderboard = async () => {
 
-      const response = await instance.get<getSquadLeaderboardResponse>('/getSquadLeaderboard');
+      const response = await instance.get<SquadLeaderboardResponse>('/getSquadLeaderboard');
   
       //console.log('useGetSquadLeaderboard response.data', response.data);
   
       return response.data;
     };
 
-    return useQuery<getSquadLeaderboardResponse, Error>({
+    return useQuery<SquadLeaderboardResponse, Error>({
       queryKey: ['getSquadLeaderboard'],
       queryFn: () => getSquadLeaderboard(),
       select: (data) => data,
@@ -377,6 +377,39 @@ export const useGetSquadLeaderboard = () => {
     });
 
 }
+
+
+
+
+// useGetPersonalLeaderboard
+
+type PersonalLeaderboardResponse = {
+  message: string;
+  data: any[];
+};
+
+export const useGetPersonalLeaderboard = () => {
+  
+    const getPersonalLeaderboard = async () => {
+
+      const response = await instance.get<PersonalLeaderboardResponse>('/getPersonalLeaderboard');
+  
+      //console.log('useGetPersonalLeaderboard response.data', response.data);
+  
+      return response.data;
+    };
+
+    return useQuery<PersonalLeaderboardResponse, Error>({
+      queryKey: ['getPersonalLeaderboard'],
+      queryFn: () => getPersonalLeaderboard(),
+      select: (data) => data,
+      enabled: false,
+      retry: 0,
+    });
+
+}
+
+
 
 
 
@@ -462,3 +495,37 @@ export const useActivateGpu = () => {
   });
 
 };
+
+
+
+
+
+
+
+// useGetGameHistoryList
+
+type getGameHistoryListResponse = {
+  message: string;
+  data: any[];
+};
+
+export const useGetGameHistoryList = () => {
+  
+    const getGameHistoryList = async () => {
+
+      const response = await instance.get<getGameHistoryListResponse>('/getGameHistoryList');
+  
+      //console.log('useGetGameHistoryList response.data', response.data);
+  
+      return response.data;
+    };
+
+    return useQuery<getGameHistoryListResponse, Error>({
+      queryKey: ['getGameHistoryList'],
+      queryFn: () => getGameHistoryList(),
+      select: (data) => data,
+      enabled: false,
+      retry: 0,
+    });
+
+}
