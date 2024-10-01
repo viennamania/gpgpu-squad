@@ -430,6 +430,13 @@ const DashBoard = () => {
 
     fetch();
 
+    // fetch data every 5 seconds
+    const intervalId = setInterval(() => {
+      fetch();
+    }, 5000);
+
+    return () => clearInterval(intervalId);
+
   }, [squadName, gpuId, squadMemberCount, squadPoint]);
 
 
