@@ -28,6 +28,7 @@ import {
 
 
 
+
 const items = [
   {
     type: 'Attacker',
@@ -83,6 +84,7 @@ const DashBoard = () => {
 
   const [gpuId, setGpuId] = useState('');
   const [virtualGpu, setVirtualGpu] = useState(0);
+  const [userSquadPoint, setUserSquadPoint] = useState(0);
   const [durationInSecond, setDurationInSecond] = useState(0);
 
   console.log('gpuId===', gpuId);
@@ -108,6 +110,8 @@ const DashBoard = () => {
         setVirtualGpu(result?.data?.virtualGpu || 0);
 
         setDurationInSecond(result?.data?.durationInSecond || 0);
+
+        setUserSquadPoint(result?.data?.squadPoint || 0);
 
         //console.log('durationInSecond===', result?.data?.durationInSecond);
 
@@ -485,7 +489,7 @@ const DashBoard = () => {
             {
               rank: squadRank,
               name: gpuId,
-              totalPoint: squadPoint,
+              totalPoint: userSquadPoint
             },
             ...personalLeaderboard,
           ])
@@ -502,7 +506,7 @@ const DashBoard = () => {
 
       return () => clearInterval(intervalId);
   
-    }, [squadName, squadPoint]);
+    }, [userSquadPoint, squadRank, gpuId]);
 
 
 
@@ -619,46 +623,6 @@ const DashBoard = () => {
     return () => clearInterval(intervalId);
 
   }, []);
-
-
-
-
-  /*
-  [
-    {
-      state: 'Attack',
-      squad: 'Coingraph',
-      content: '-300,000 points',
-      date: new Date(),
-    },
-    {
-      state: 'Damage',
-      squad: 'Coingraph',
-      content: '-80,000 points',
-      date: new Date(),
-    },
-    {
-      state: 'Purchase',
-      squad: '-',
-      content: '-80,000 points',
-      date: new Date(),
-    },
-    {
-      state: 'Join',
-      squad: '-',
-      content: 'Orange',
-      date: new Date(),
-    },
-    {
-      state: 'Join',
-      squad: '-',
-      content: 'Orange',
-      date: new Date(),
-    },
-  ]
-    */
-
-
 
 
 

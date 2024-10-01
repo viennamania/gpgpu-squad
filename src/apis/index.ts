@@ -184,6 +184,7 @@ type getUserGpuIdResponse = {
   message: string;
   gpuId: string;
   virtualGpu: number;
+  squadPoint: number;
   activatedAt: Date;
   durationInSecond: number;
 };
