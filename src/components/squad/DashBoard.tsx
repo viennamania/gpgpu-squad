@@ -658,38 +658,51 @@ const items = [
 
     // gameHistory is which is action is 'attackSquad' and sort by createdAt desc
 
-    gameHistory.map((item: any) => {
+    const fetch = async () => {
 
-      let i = 0;
+      gameHistory.map((item: any) => {
 
-      if (item?.action === 'attackSquad') {
+        let i = 0;
 
-        //timeAgo is form now to createdAt
-        const timeAgo = (new Date().getTime() - new Date(item?.createdAt).getTime()) / 1000 + 's ago';
+        if (item?.action === 'attackSquad') {
 
-        console.log('timeAgo===', timeAgo);
+          //timeAgo is form now to createdAt
+          const timeAgo = (new Date().getTime() - new Date(item?.createdAt).getTime()) / 1000 + 's ago';
+
+          console.log('timeAgo===', timeAgo);
 
 
 
-        itemsData.push({
-          type: i === 0 ? 'Attacker' : i === 1 ? 'Attacker2' : 'Attacker3',
-          typeCount: 13,
-          name: item?.squadName,
-          target: 'Victim',
-          targetCount: 4,
-          targetName: 'airdopfinder',
-          points: '-300,000,000 Point',
-          
-          timeAgo: timeAgo,
-        });
+          itemsData.push({
+            type: i === 0 ? 'Attacker' : i === 1 ? 'Attacker2' : 'Attacker3',
+            typeCount: 13,
+            name: item?.squadName,
+            target: 'Victim',
+            targetCount: 4,
+            targetName: 'airdopfinder',
+            points: '-300,000,000 Point',
+            
+            timeAgo: timeAgo,
+          });
 
-        i++;
+          i++;
 
-      }
+        }
 
-    });
+      });
 
-    setItems(itemsData);
+      setItems(itemsData);
+
+    }
+
+    fetch();
+
+    // fetch data every 5 seconds
+    const intervalId = setInterval(() => {
+      fetch();
+    }, 5000);
+
+    return () => clearInterval(intervalId);
 
   } , [squadHistoryData]);
 
