@@ -316,9 +316,9 @@ const SecondStep = ({setStep, setIsJoined}: SecondStepPropsType) => {
         const squadList = result?.data?.data.map((item: any) => {
           return {
             rank: 1,
-            name: item.squadName,
-            leader: item.gpuId,
-            member: 2333,
+            name: item?.squadName,
+            leader: item?.gpuId,
+            member: item?.joinedMemberCount,
             radio: false,
           };
         } );
