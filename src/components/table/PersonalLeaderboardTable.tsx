@@ -5,6 +5,7 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+
 import {useState, useEffect} from 'react';
 import Pagination from './Pagination';
 
@@ -90,12 +91,23 @@ const PersonalLeaderboardTable = ({ personalLeaderboardData }: PersonalLeaderboa
     },
   ];
 
+  const pageSize = 20;
+
   const table = useReactTable({
+
+    initialState: {
+      pagination: {
+        pageSize: pageSize,
+      }
+    },
+
     data: tableData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+
+
 
   return (
     <div className="flex flex-1 flex-col">
@@ -161,7 +173,9 @@ const PersonalLeaderboardTable = ({ personalLeaderboardData }: PersonalLeaderboa
       <Pagination
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-        totalPages={Math.floor(tableData.length / 10) + 1}
+        
+        totalPages={Math.floor(tableData.length / pageSize) + 1}
+
         className="mt-8"
       />
     </div>

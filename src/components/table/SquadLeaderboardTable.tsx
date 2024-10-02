@@ -181,7 +181,15 @@ const SquadLeaderboardTable = ({squadLeaderboardData}: SquadLeaderboardTableProp
     },
   ];
 
+
+  const pageSize = 20;
+
   const table = useReactTable({
+    initialState: {
+      pagination: {
+        pageSize: pageSize,
+      }
+    },
     data: tableData,
     columns,
     getCoreRowModel: getCoreRowModel(),
@@ -252,7 +260,7 @@ const SquadLeaderboardTable = ({squadLeaderboardData}: SquadLeaderboardTableProp
       <Pagination
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-        totalPages={Math.floor(tableData.length / 10) + 1}
+        totalPages={Math.floor(tableData.length / pageSize) + 1}
         className="my-8"
       />
     </div>

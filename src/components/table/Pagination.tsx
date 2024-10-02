@@ -15,6 +15,7 @@ const Pagination = ({
   totalPages,
   className,
 }: PaginationPropsType) => {
+
   const range = (start: number, end: number) => {
     return Array.from({length: end - start + 1}, (_, idx) => start + idx);
   };
@@ -44,6 +45,7 @@ const Pagination = ({
 
     return range(start, end);
   };
+  
 
   return (
     <div className={'flex justify-center ' + className}>
