@@ -530,3 +530,33 @@ export const useGetGameHistoryList = () => {
     });
 
 }
+
+
+
+// useGetSquadAttackHistoryList
+
+type getSquadAttackHistoryListResponse = {
+  message: string;
+  data: any[];
+};
+
+export const useGetSquadAttackHistoryList = () => {
+  
+    const getSquadAttackHistoryList = async () => {
+
+      const response = await instance.get<getSquadAttackHistoryListResponse>('/getSquadAttackHistoryList');
+  
+      //console.log('useGetSquadAttackHistoryList response.data', response.data);
+  
+      return response.data;
+    };
+
+    return useQuery<getSquadAttackHistoryListResponse, Error>({
+      queryKey: ['getSquadAttackHistoryList'],
+      queryFn: () => getSquadAttackHistoryList(),
+      select: (data) => data,
+      enabled: false,
+      retry: 0,
+    });
+
+}

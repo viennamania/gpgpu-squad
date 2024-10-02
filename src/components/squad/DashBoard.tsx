@@ -23,7 +23,10 @@ import {
   useGetPersonalLeaderboard,
 
   useGetGameHistoryList,
+
+  useGetSquadAttackHistoryList,
 } from '../../apis';
+
 
 
 
@@ -482,10 +485,6 @@ const DashBoard = () => {
 
 
 
-  const [gameHistory, setGameHistory] = useState([] as any);
-
-
-
   interface SquadHistoryItem {
     state: string;
     squad: string;
@@ -506,20 +505,8 @@ const DashBoard = () => {
 
       if (result?.data?.data) {
 
-        setGameHistory(result?.data?.data);
-        
+  
         const squadHistory = result?.data?.data.map((item: any) => {
-
-          /*
-          {
-            "_id": "66fb75032e1b3c437d3e07ad",
-            "createdAt": "2024-10-01T04:05:23.178Z",
-            "walletAddress": "0x766965F3f902215C96477b46c3e3d540436A7d64",
-            "gpuId": "hqqggaa",
-            "squadName": "songpa",
-            "action": "joinSquad"
-        }
-          */
 
           let state = '';
           if (item?.action === 'joinSquad') {
@@ -638,6 +625,10 @@ const items = [
 ];
 */
 
+
+
+
+
   interface SquadAttackHistoryItem {
     type: string;
     typeCount: number;
@@ -652,47 +643,67 @@ const items = [
   const [items, setItems] = useState([] as SquadAttackHistoryItem[]);
 
 
+  const {refetch:
+    squadAttackHistoryList,
+  } = useGetSquadAttackHistoryList();
+
+
+
   useEffect(() => {
 
-    let itemsData = [] as SquadAttackHistoryItem[];
 
     // gameHistory is which is action is 'attackSquad' and sort by createdAt desc
 
     const fetch = async () => {
 
-      gameHistory.map((item: any) => {
 
-        let i = 0;
-
-        if (item?.action === 'attackSquad') {
-
-          //timeAgo is form now to createdAt
-          const timeAgo = (new Date().getTime() - new Date(item?.createdAt).getTime()) / 1000 + 's ago';
-
-          console.log('timeAgo===', timeAgo);
+      const itemsData = [] as SquadAttackHistoryItem[];
 
 
-          // push item to first order
+      const result = await squadAttackHistoryList();
 
-          
+      if (result?.data?.data) {
 
-          itemsData.push({
-            type: i === 0 ? 'Attacker' : i === 1 ? 'Attacker2' : 'Attacker3',
-            typeCount: 13,
-            name: item?.squadName,
-            target: 'Victim',
-            targetCount: 4,
-            targetName: 'airdopfinder',
-            points: '-300,000,000 Point',
+
+        const gameHistory = result?.data?.data;
+
+        gameHistory.forEach((item: any) => {
+
+          let i = 0;
+
+          if (item?.action === 'attackSquad') {
+
+            //timeAgo is form now to createdAt
+            const timeAgo = (new Date().getTime() - new Date(item?.createdAt).getTime()) / 1000 + 's ago';
+
+            console.log('timeAgo===', timeAgo);
+
+
+            // push item to first order
+
             
-            timeAgo: timeAgo,
-          });
 
-          i++;
+            itemsData.push({
+              type: i === 0 ? 'Attacker' : i === 1 ? 'Attacker2' : 'Attacker3',
+              typeCount: 13,
+              name: item?.squadName,
+              target: 'Victim',
+              targetCount: 4,
+              targetName: 'airdopfinder',
+              points: '-300,000,000 Point',
+              
+              timeAgo: timeAgo,
+            });
 
-        }
+            i++;
 
-      });
+          }
+
+        });
+
+      }
+
+
 
       setItems(itemsData);
 
@@ -707,7 +718,7 @@ const items = [
 
     return () => clearInterval(intervalId);
 
-  } , [squadHistoryData]);
+  } , []);
 
 
 
